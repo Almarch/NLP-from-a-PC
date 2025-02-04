@@ -1,19 +1,24 @@
+FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu20.04
 
-FROM jupyter/base-notebook:latest
+# Install python & jupyter
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Python dependencies
-COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir build
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --upgrade pip
+RUN pip3 install jupyter
+RUN pip3 install torch
+RUN pip3 install transformers
+RUN pip3 install accelerate
 
-# disable security (this is intended for local use)
-RUN echo "c.NotebookApp.token = ''" >> /etc/jupyter/jupyter_notebook_config.py
+# Disable security
+RUN jupyter notebook --generate-config
+RUN echo "c.NotebookApp.token = ''" >> $(jupyter --config-dir)/jupyter_notebook_config.py
 
-# access project (shared volume)
-WORKDIR /project
-RUN echo "c.NotebookApp.default_url = '/project/'" >> /etc/jupyter/jupyter_notebook_config.py
+# Set default URL
+RUN echo "c.NotebookApp.default_url = '/project/'" >> $(jupyter --config-dir)/jupyter_notebook_config.py
 
 # expose & launch
 EXPOSE 8888
-CMD ["start-notebook.sh"]
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--no-browser", "--allow-root"]

@@ -1,4 +1,4 @@
-version: '3.8'
+
 services:
   notebook:
     build: ./
@@ -6,3 +6,8 @@ services:
       - ./project:/project
     ports:
       - 8888:8888
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
