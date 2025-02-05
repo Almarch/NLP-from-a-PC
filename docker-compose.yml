@@ -4,6 +4,7 @@ services:
     build: ./
     volumes:
       - ./project:/project
+      - ./model:/model
     ports:
       - 8888:8888
     deploy:
