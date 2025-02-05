@@ -36,7 +36,7 @@ Name|A  |B  |C  |
 Description|Gaming machine  |VPS  |Client  |
 Role|Host the LLM  |Host the tunnel  |Plays around  | 
 User|userA  |userB  | doesn't matter   | 
-IP|doesn't matter  |11.22.33.44  | doesn't matter  | 
+IP|doesn't matter  |11.22.33.44  | 55.66.77.88  | 
 
 The services we need are:
 - A jupyter notebook. It will be exposed at port 8888.
@@ -51,29 +51,32 @@ ssh -N -R 8888:localhost:8888 -R 7777:localhost:7777 -R 2222:localhost:22 userB@
 ```
 
 ### From B) the VPS
-The appropriate ports are opened:
+The SSH port 2222 has to be opened. Say we want the API to be reachable from a specific IP.
 
 ```sh
 sudo ufw allow 2222
-sudo ufw allow 7777
-sudo ufw allow 8888
+sudo ufw allow from 55.66.77.88 to any port 7777
 sudo ufw reload
 ```
 
+Be careful not to open e.g. 8888 to the world or the jupyter notebook would be made public.
+
+The jupyter notebook sh
+
 ### From C) the client
-The jupyter notebook and the API ports are pulled from the VPS:
+The jupyter notebook is pulled from the VPS:
 
 ```sh
-ssh -N -L 8888:localhost:8888 -L 7777:localhost:7777  userB@11.22.33.44
+ssh -N -L 8888:localhost:8888 userB@11.22.33.44
 ```
 
-To connect to A directly with SSH:
+And the VPS is a direct tunnel to the gaming machine A:
 
 ```sh
 ssh -p 2222 userA@11.22.33.44
 ```
 
-Note that `userA`, not `userB`, is required for authentication.
+Note that `userA`, not `userB`, is required for authentication ; idem for the password.
 
 
 
