@@ -8,7 +8,7 @@ The goal of this repo is to run a light-weighted LLM on a gaming computer.
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Docker_%28container_engine%29_logo_%28cropped%29.png" width="120px" align="right"/>
 
-The project is containerized.
+The project is containerized with docker.
 
 ```sh
 git clone https://github.com/Almarch/hello
@@ -59,9 +59,7 @@ sudo ufw allow from 55.66.77.88 to any port 7777
 sudo ufw reload
 ```
 
-Be careful not to open e.g. 8888 to the world or the jupyter notebook would be made public.
-
-The jupyter notebook sh
+Be careful not to open 8888 or the jupyter notebook would be made public.
 
 ### From C) the client
 The jupyter notebook is pulled from the VPS:
