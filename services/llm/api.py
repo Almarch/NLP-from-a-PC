@@ -25,11 +25,13 @@ print(model.hf_device_map)
 ### API
 app = FastAPI()
 
-class Message(BaseModel):
-    role: str = "user"
-    content: str = "Hello"
 class RequestBody(BaseModel):
-    text: List[Message]
+    text: List = [
+        {
+            "role": "user",
+            "content": "Hello"
+        }
+    ]
     ntokens: int = 100
 
 @app.post("/hey")
