@@ -1,7 +1,7 @@
 
 services:
   llm:
-    build: ./llm/
+    build: ./services/llm/
     volumes:
       - ./model:/model
     ports:
@@ -13,7 +13,7 @@ services:
             - capabilities: [gpu]
 
   notebook:
-    build: ./notebook/
+    build: ./services/notebook/
     volumes:
       - ./project:/project
     depends_on:
