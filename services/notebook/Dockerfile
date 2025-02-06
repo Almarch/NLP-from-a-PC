@@ -3,6 +3,7 @@ FROM jupyter/base-notebook:latest
 # Python dependencies
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir build
+COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # disable security (this is intended for local use)
