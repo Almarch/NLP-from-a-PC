@@ -1,0 +1,8 @@
+torch
+transformers
+accelerate
+safetensors
+fastapi
+uvicorn
+pydantic
+typing
