@@ -33,6 +33,7 @@ class RequestBody(BaseModel):
         }
     ]
     ntokens: int = 100
+    temperature: float = .6
 
 @app.post("/hey")
 async def generate(request: RequestBody):
@@ -43,7 +44,8 @@ async def generate(request: RequestBody):
     )
     outputs = model.generate(
         input_tensor.to(model.device),
-        max_new_tokens=request.ntokens
+        max_new_tokens=request.ntokens,
+        temperature=request.temperature
     )
     result = tokenizer.decode(
         outputs[0][input_tensor.shape[1]:],
