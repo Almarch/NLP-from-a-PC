@@ -1,4 +1,5 @@
-FROM ubuntu20.04
+FROM alpine:latest
+
 # Install python & jupyter
 RUN apt-get update && apt-get install -y \
     python3-pip \
