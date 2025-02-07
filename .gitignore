@@ -1,4 +1,4 @@
 services/llm/model/*
 services/minilm/model/*
-services/jupyter/notebooks/.ipynb_checkpoints/*
+services/jupyter/notebook/.ipynb_checkpoints/*
 services/weaviate/data/*

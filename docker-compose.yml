@@ -5,7 +5,7 @@ services:
     volumes:
       - ./services/llm/model:/model
     ports:
-      - 80:7777
+      - 7777:80
     deploy:
       resources:
         reservations:
