@@ -2,3 +2,4 @@ fastapi
 uvicorn
 pytesseract
 Pillow
+python-multipart
