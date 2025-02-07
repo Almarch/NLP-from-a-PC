@@ -42,5 +42,6 @@ services:
       - llm
       - minilm
       - weaviate
+      - ocr
     ports:
       - 8888:8888
