@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import List
 import os
 
-model_name = "all-MiniLM-L6-v2"
+model_name = "all-mpnet-base-v2"
 
 if os.path.exists("/model/" + model_name):
     model = SentenceTransformer("/model/" + model_name)
