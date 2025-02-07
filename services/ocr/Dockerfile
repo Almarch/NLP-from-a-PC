@@ -1,5 +1,8 @@
 FROM python:3.10
 
+# Install Tesseract OCR
+RUN apt-get update && apt-get install -y tesseract-ocr
+
 # Install Python dependencies
 WORKDIR /app
 COPY requirements.txt .

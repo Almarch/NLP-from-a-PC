@@ -17,6 +17,9 @@ services:
     volumes:
       - ./services/minilm/model:/model
 
+  ocr:
+    build: ./services/ocr/
+
   weaviate:
     image: semitechnologies/weaviate:1.21.2
     restart: always
