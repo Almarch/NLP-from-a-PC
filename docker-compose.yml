@@ -3,20 +3,41 @@ services:
   llm:
     build: ./services/llm/
     volumes:
-      - ./model:/model
+      - ./services/llm/model:/model
     ports:
-      - 7777:7777
+      - 7777:80
     deploy:
       resources:
         reservations:
           devices:
             - capabilities: [gpu]
 
-  notebook:
-    build: ./services/notebook/
+  minilm:
+    build: ./services/minilm/
     volumes:
-      - ./project:/project
+      - ./services/minilm/model:/model
+
+  weaviate:
+    image: semitechnologies/weaviate:1.21.2
+    restart: always
+    depends_on:
+      - minilm
+    environment:
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_MODULES: 'text2vec-transformers'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-transformers'
+      TRANSFORMERS_INFERENCE_API: 'http://minilm:80'
+    volumes:
+      - ./services/weaviate/data:/var/lib/weaviate
+
+  notebook:
+    build: ./services/jupyter/
+    volumes:
+      - ./services/jupyter/notebook:/project
     depends_on:
       - llm
+      - minilm
+      - weaviate
     ports:
       - 8888:8888

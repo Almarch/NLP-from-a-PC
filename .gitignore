@@ -1,3 +1,4 @@
-project/offload/*
-model/*
-project/.ipynb_checkpoints/*
+services/llm/model/*
+services/minilm/model/*
+services/jupyter/notebook/.ipynb_checkpoints/*
+services/weaviate/data/*

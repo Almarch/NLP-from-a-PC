@@ -1,5 +1,4 @@
 import torch
-import safetensors
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -25,12 +24,15 @@ print(model.hf_device_map)
 ### API
 app = FastAPI()
 
-class Message(BaseModel):
-    role: str
-    content: str
 class RequestBody(BaseModel):
-    text: List[Message]
-    ntokens: int
+    text: List = [
+        {
+            "role": "user",
+            "content": "Hello"
+        }
+    ]
+    ntokens: int = 100
+    temperature: float = .6
 
 @app.post("/hey")
 async def generate(request: RequestBody):
@@ -41,7 +43,8 @@ async def generate(request: RequestBody):
     )
     outputs = model.generate(
         input_tensor.to(model.device),
-        max_new_tokens=request.ntokens
+        max_new_tokens=request.ntokens,
+        temperature=request.temperature
     )
     result = tokenizer.decode(
         outputs[0][input_tensor.shape[1]:],
