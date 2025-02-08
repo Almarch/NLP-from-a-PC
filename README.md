@@ -1,6 +1,6 @@
-# hello
+# Run a LLM with RAG from a Gaming PC
 
-The goal of this repo is to set up a NLP framework running on a gaming computer.
+The goal of this repo is to play with natural language processing with relatively limited resources.
 
 ## 0. Launch with Docker
 
@@ -27,17 +27,13 @@ A Jupyter Notebook is also here for development purposes.
 
 ## 2. LLM
 
-<img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="left"/>
+<img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="right"/>
 
 The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked.
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+
+NB:
+- The {"system": ...} instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
+- The attention mask error message should be disregarded, as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
 
 ## 3. Vector data base
 
