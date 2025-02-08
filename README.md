@@ -45,7 +45,7 @@ A [vector data base](https://weaviate.io/blog/what-is-a-vector-database) is incl
 
 In order to feed the data base from raw pdf, 3 models are needed:
 
-<p align="center"><img src="https://github.com/user-attachments/assets/38c913c2-bb05-4c93-af94-5e151b934209" width="900px"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/ff1ba80f-fb1d-44e3-a95c-abd6074b4845" width="900px"/></p>
 
 A python class `/services/jupyter/notebook/Resource.py` encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base. The OCR and the tokenizer have been picked for the following languages:
 
