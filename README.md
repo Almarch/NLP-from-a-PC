@@ -32,7 +32,7 @@ A Jupyter Notebook is also here for development purposes.
 The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked.
 
 NB:
-- The `{"system": ...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
+- The `{"role": "system", "content":...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
 - The `attention_mask` error message should be disregarded, as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
 
 ### 1.1. Vector data base
