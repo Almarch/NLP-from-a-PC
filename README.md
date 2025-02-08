@@ -2,7 +2,7 @@
 
 The goal of this repo is to play with natural language processing with relatively limited resources.
 
-## 0. Launch with Docker
+## 0. Set-up with Docker
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
 
@@ -25,7 +25,7 @@ A vector data base is available in order to extract relevant context from specif
 
 A Jupyter Notebook is also here for development purposes.
 
-## 2. LLM
+### 1.0. LLM
 
 <img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="right"/>
 
@@ -35,7 +35,7 @@ NB:
 - The `{"system": ...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
 - The `attention_mask` error message should be disregarded, as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
 
-## 3. Vector data base
+### 1.1. Vector data base
 
 A [vector data base](https://weaviate.io/blog/what-is-a-vector-database) is included in the cluster.
 
@@ -58,19 +58,19 @@ A python class `/services/jupyter/notebook/Resource.py` encompasses all these st
 </div>
 </div>
 
-## 4. OCR
+### 1.2. OCR
 
 The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/).
 
-## 4. Tokenizer
+### 1.3. Tokenizer
 
 The tokenizers are the transformer models from [spaCy](https://spacy.io/models/).
 
-## 5. Encoder
+### 1.4. Encoder
 
 The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768.
 
-## 6. Tunneling
+## 2. Tunneling
 
 <img src="https://github.com/user-attachments/assets/86197798-9039-484b-9874-85f529fba932" width="100px" align="right"/>
 
