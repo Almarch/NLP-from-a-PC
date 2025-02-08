@@ -22,7 +22,7 @@ services:
 
   tokenizer:
     build: ./services/tokenizer/
-    volume:
+    volumes:
       - ./services/tokenizer/model:/model
 
   weaviate:
