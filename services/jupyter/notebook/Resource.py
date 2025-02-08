@@ -23,8 +23,39 @@ class Resource:
             # Send image to OCR service and get the text
             response = requests.post(
                 "http://ocr/read",
-                files= {
+                files = {
                     "file": img_bytes
                 }
             )
-            self.text += response.json().get("text", "") + "\n"
+            self.text += response.json().get("text") + "\n"
+
+    def split(self, lang = "en"):
+        assert("text" in self.__dict__)
+
+        # Send text to tokenizer service and get the chunks
+        response = requests.post(
+            "http://tokenizer/split",
+            json = {
+                "text": self.text,
+                "lang": lang,
+            }
+        )
+        self.sentences = response.json().get("sentences")
+
+    def vectorize(self):
+        assert("sentences" in self.__dict__)
+
+        # Send text to tokenizer service and get the chunks
+        response = requests.post(
+            "http://encoder/v1/vectorize",
+            json = {
+                "text": self.sentences,
+            }
+        )
+        self.vectors = response.json()
+        
+    def store(self):
+        pass
+
+
+

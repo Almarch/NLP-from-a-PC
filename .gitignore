@@ -1,3 +1,5 @@
 services/jupyter/notebook/.ipynb_checkpoints/*
 services/*/model/*
 services/*/data/*
+*.pdf
+*.pyc

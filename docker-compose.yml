@@ -22,8 +22,6 @@ services:
 
   tokenizer:
     build: ./services/tokenizer/
-    volumes:
-      - ./services/tokenizer/model:/model
 
   weaviate:
     image: semitechnologies/weaviate:1.21.2
