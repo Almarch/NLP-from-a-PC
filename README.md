@@ -1,12 +1,10 @@
 # hello
 
-<p align="center"><img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="300px"/></p>
-
 The goal of this repo is to set up a NLP framework running on a gaming computer.
 
-## Launch with Docker
+## 0. Launch with Docker
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Docker_%28container_engine%29_logo_%28cropped%29.png" width="120px" align="right"/>
+<img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
 
 The project is containerized with docker.
 
@@ -19,35 +17,68 @@ docker compose up
 
 Cuda is highly recommanded for performance. [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
-## Services
+## 1. Services
 
-The project contains a light-weighted LLM, and a vectorial data base in order to process a RAG.
+The project contains several services and models, and strictly follows the philosophy: 1 model = 1 service. Some services aren't models though.
 
-The vectorial data base requires an encoder in order to convert text into relevant vectors.
+A vector data base is available in order to extract relevant context from specific fields.
 
-Feeding the data base from PDF requires an OCR and a tokenizer models.
+A Jupyter Notebook is also here for development purposes.
 
-The project is structured under the philosophy: 1 model = 1 service.
+## 2. LLM
 
-A Jupyter Notebook is provided for development purposes.
-
-## LLM
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/DeepSeek_logo.svg" width="300px" align="right"/>
+<img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="left"/>
 
 The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked.
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-## Encoder
+## 3. Vector data base
 
-## OCR
+A [vector data base](https://weaviate.io/blog/what-is-a-vector-database) is included in the cluster.
 
-## Tokenizer
+In order to feed the data base from raw pdf, 3 models are needed:
 
-## Tunneling
+<p align="center"><img src="https://github.com/user-attachments/assets/38c913c2-bb05-4c93-af94-5e151b934209" width="900px"/></p>
+
+A python class `/services/jupyter/notebook/Resource.py` encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base. The OCR and the tokenizer have been picked for the following languages:
+
+<div align="center">
+<div style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: auto;
+">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="en"  width="40px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="fr"  width="40px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="es"  width="40px">
+</div>
+</div>
+
+## 4. OCR
+
+The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/).
+
+## 4. Tokenizer
+
+The tokenizers are the transformer models from [spaCy](https://spacy.io/models/).
+
+## 5. Encoder
+
+The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768.
+
+## 6. Tunneling
 
 <img src="https://github.com/user-attachments/assets/86197798-9039-484b-9874-85f529fba932" width="100px" align="right"/>
 
-It is sometimes cheaper to pay for a virtual private server (VPS) than suscribing a fixed IP to the Internet provider. We want some services from the gaming machine, let's call it A, to be accessible from anywhere, including from machine C. In the middle, B is the VPS used as a tunnel. 
+It is sometimes easier to take a virtual private server (VPS) than obtaining a fixed IP from the Internet provider. We want some services from the gaming machine, let's call it A, to be accessible from anywhere, including from machine C. In the middle, B is the VPS used as a tunnel. 
 
 Name|A  |B  |C  |
 ---|---|---|---
