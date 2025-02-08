@@ -33,7 +33,7 @@ class RequestBody(BaseModel):
     temperature: float = .6
 
 @app.post("/info")
-async def device_info(request):
+async def device_info():
     return model.hf_device_map
 
 @app.post("/hey")
