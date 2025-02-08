@@ -9,7 +9,7 @@ The goal of this repo is to play with natural language processing with relativel
 The project is containerized with docker.
 
 ```sh
-git clone https://github.com/Almarch/hello
+git clone https://github.com/Almarch/NLP-from-a-PC
 cd hello
 docker compose build
 docker compose up
