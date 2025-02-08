@@ -1,1 +1,3 @@
 requests
+weaviate-client
+pdf2image

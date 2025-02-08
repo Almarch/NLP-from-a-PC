@@ -2,9 +2,9 @@
 
 <p align="center"><img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="300px"/></p>
 
-The goal of this repo is to run a light-weighted LLM on a gaming computer.
+The goal of this repo is to set up a NLP framework running on a gaming computer.
 
-## Launch with docker
+## Launch with Docker
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Docker_%28container_engine%29_logo_%28cropped%29.png" width="120px" align="right"/>
 
@@ -19,11 +19,29 @@ docker compose up
 
 Cuda is highly recommanded for performance. [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
+## Services
+
+The project contains a light-weighted LLM, and a vectorial data base in order to process a RAG.
+
+The vectorial data base requires an encoder in order to convert text into relevant vectors.
+
+Feeding the data base from PDF requires an OCR and a tokenizer models.
+
+The project is structured under the philosophy: 1 model = 1 service.
+
+A Jupyter Notebook is provided for development purposes.
+
 ## LLM
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/DeepSeek_logo.svg" width="300px" align="right"/>
 
 The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked.
+
+## Encoder
+
+## OCR
+
+## Tokenizer
 
 ## Tunneling
 

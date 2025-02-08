@@ -17,6 +17,12 @@ services:
     volumes:
       - ./services/encoder/model:/model
 
+  ocr:
+    build: ./services/ocr/
+
+  tokenizer:
+    build: ./services/tokenizer/
+
   weaviate:
     image: semitechnologies/weaviate:1.21.2
     restart: always
@@ -39,5 +45,7 @@ services:
       - llm
       - encoder
       - weaviate
+      - ocr
+      - tokenizer
     ports:
       - 8888:8888
