@@ -20,6 +20,11 @@ services:
   ocr:
     build: ./services/ocr/
 
+  tokenizer:
+    build: ./services/tokenizer/
+    volume:
+      - ./services/tokenizer/model:/model
+
   weaviate:
     image: semitechnologies/weaviate:1.21.2
     restart: always
@@ -43,5 +48,6 @@ services:
       - encoder
       - weaviate
       - ocr
+      - tokenizer
     ports:
       - 8888:8888

@@ -1,5 +1,4 @@
 requests
 weaviate-client
-nltk
 pypdf
 Pillow
