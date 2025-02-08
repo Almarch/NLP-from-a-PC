@@ -1,5 +1,12 @@
 FROM jupyter/base-notebook:latest
 
+# System dependencies
+USER root
+RUN apt-get update && apt-get install -y \
+    poppler-utils \
+    && apt-get clean
+USER jovyan
+
 # Python dependencies
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir build
