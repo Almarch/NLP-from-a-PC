@@ -5,7 +5,7 @@ import io
 
 app = FastAPI()
 
-@app.post("/ocr/")
+@app.post("/read/")
 async def extract_text(file: UploadFile = File(...)):
     image = Image.open(io.BytesIO(await file.read()))
     text = pytesseract.image_to_string(image, lang='eng+fra+spa')

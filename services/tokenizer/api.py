@@ -10,7 +10,7 @@ class TextRequest(BaseModel):
     text: str
     lang: str = "fr"
 
-@app.post("/tokenize/")
+@app.post("/split/")
 async def tokenize(request: TextRequest):
 
     assert(request.lang in ["en","fr","es"])

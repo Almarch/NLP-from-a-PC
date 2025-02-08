@@ -18,8 +18,6 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 model.generation_config = GenerationConfig.from_pretrained(model_name)
 model.generation_config.pad_token_id = model.generation_config.eos_token_id
-print(torch.cuda.is_available())  # Should return True
-print(model.hf_device_map)
 
 ### API
 app = FastAPI()
@@ -33,6 +31,10 @@ class RequestBody(BaseModel):
     ]
     ntokens: int = 100
     temperature: float = .6
+
+@app.post("/info")
+async def device_info(request):
+    return model.hf_device_map
 
 @app.post("/hey")
 async def generate(request: RequestBody):
