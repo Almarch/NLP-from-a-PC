@@ -10,7 +10,7 @@ The project is containerized with docker.
 
 ```sh
 git clone https://github.com/Almarch/NLP-from-a-PC
-cd hello
+cd NLP-from-a-PC
 docker compose build
 docker compose up
 ```
