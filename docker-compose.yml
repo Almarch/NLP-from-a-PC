@@ -12,10 +12,10 @@ services:
           devices:
             - capabilities: [gpu]
 
-  minilm:
-    build: ./services/minilm/
+  encoder:
+    build: ./services/encoder/
     volumes:
-      - ./services/minilm/model:/model
+      - ./services/encoder/model:/model
 
   ocr:
     build: ./services/ocr/
@@ -24,13 +24,13 @@ services:
     image: semitechnologies/weaviate:1.21.2
     restart: always
     depends_on:
-      - minilm
+      - encoder
     environment:
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
       ENABLE_MODULES: 'text2vec-transformers'
       DEFAULT_VECTORIZER_MODULE: 'text2vec-transformers'
-      TRANSFORMERS_INFERENCE_API: 'http://minilm:80'
+      TRANSFORMERS_INFERENCE_API: 'http://encoder:80'
     volumes:
       - ./services/weaviate/data:/var/lib/weaviate
 
@@ -40,7 +40,7 @@ services:
       - ./services/jupyter/notebook:/project
     depends_on:
       - llm
-      - minilm
+      - encoder
       - weaviate
       - ocr
     ports:
