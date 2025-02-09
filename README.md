@@ -43,7 +43,9 @@ In order to feed the data base from raw pdf, 3 models are needed:
 
 <p align="center"><img src="https://github.com/user-attachments/assets/ff1ba80f-fb1d-44e3-a95c-abd6074b4845" width="900px"/></p>
 
-A python class `/services/jupyter/notebook/Resource.py` encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base. The OCR and the tokenizer have been picked for the following languages:
+A python class `/services/jupyter/notebook/Resource.py` encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base.
+
+The OCR and the tokenizer have been selected for the following languages:
 
 <div align="center">
 <div style="
@@ -57,6 +59,8 @@ A python class `/services/jupyter/notebook/Resource.py` encompasses all these st
     <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="es"  width="40px">
 </div>
 </div>
+
+The encoder is designed to work with English only. Therefore, the chunks must be translated to English using the LLM before being embedded.
 
 ### 1.2. OCR
 
