@@ -68,7 +68,7 @@ The tokenizers are the transformer models from [spaCy](https://spacy.io/models/)
 
 ### 1.4. Encoder
 
-The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768.
+The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768. It has been tuned using cosine similarity.
 
 ## 2. Tunneling
 
