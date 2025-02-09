@@ -1,3 +1,4 @@
 requests
 weaviate-client
 pdf2image
+matplotlib

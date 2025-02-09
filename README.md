@@ -33,7 +33,7 @@ The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingfa
 
 NB:
 - The `{"role": "system", "content":...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
-- The `attention_mask` error message should be disregarded, as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
+- As far as I understand the `attention_mask` error message should be disregarded as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
 
 ### 1.1. Vector data base
 
@@ -60,7 +60,7 @@ A python class `/services/jupyter/notebook/Resource.py` encompasses all these st
 
 ### 1.2. OCR
 
-The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/).
+The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/). It may be a bottleneck as for instance it cannot process [this resource](https://pubmed.ncbi.nlm.nih.gov/6342763/).
 
 ### 1.3. Tokenizer
 
