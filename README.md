@@ -2,6 +2,13 @@
 
 The goal of this repo is to play with natural language processing with relatively limited resources.
 
+# 🚧 this is a work in progress 🚧
+
+- ✅ All services run and are properly served by at least one API
+- ⚠️ Some further APIs and associated functions are missing 
+- ⚠️ Coherent pipelines are to be developped
+- ⚠️ Some services exhibit questionnable performances and should be tuned or benchmarked
+
 ## 0. Set-up with Docker
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
@@ -35,15 +42,21 @@ NB:
 - The `{"role": "system", "content":...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
 - As far as I understand the `attention_mask` error message should be disregarded as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
 
+The LLM is proficient with a variety of languages including latin and non-latin alphabets.
+
 ### 1.1. Vector data base
 
 A [vector data base](https://weaviate.io/blog/what-is-a-vector-database) is included in the cluster.
 
-In order to feed the data base from raw pdf, 3 models are needed:
+In order to feed the data base from raw pdf, 4 models are needed:
 
-<p align="center"><img src="https://github.com/user-attachments/assets/ff1ba80f-fb1d-44e3-a95c-abd6074b4845" width="900px"/></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/4109c7b2-29b7-4c53-9b3c-753a96ec39f0" width="900px"/></p>
 
-A python class `/services/jupyter/notebook/Resource.py` encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base. The OCR and the tokenizer have been picked for the following languages:
+A python class `/services/jupyter/notebook/Resource.py` (will) encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base.
+
+### 1.2. OCR
+
+The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/). It accepts any of the following languages:
 
 <div align="center">
 <div style="
@@ -57,18 +70,45 @@ A python class `/services/jupyter/notebook/Resource.py` encompasses all these st
     <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="es"  width="40px">
 </div>
 </div>
+<br>
 
-### 1.2. OCR
-
-The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/). It may be a bottleneck as for instance it cannot process [this resource](https://pubmed.ncbi.nlm.nih.gov/6342763/).
+It has shown limitations, for instance this resource could not be processed: [this resource](https://pubmed.ncbi.nlm.nih.gov/6342763/).
 
 ### 1.3. Tokenizer
 
-The tokenizers are the transformer models from [spaCy](https://spacy.io/models/).
+The tokenizers are the transformer models from [spaCy](https://spacy.io/models/). There are 3 models, one for each of these language (the language should therefore be thoroughly mentionned in the API call):
+
+<div align="center">
+<div style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: auto;
+">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="en"  width="40px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="fr"  width="40px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="es"  width="40px">
+</div>
+</div>
+<br>
 
 ### 1.4. Encoder
 
-The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768. It has been tuned using cosine similarity.
+The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768. It has been tuned using cosine similarity. It is primarily designed for English:
+
+<div align="center">
+<div style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin: auto;
+">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="en"  width="40px">
+</div>
+</div>
+<br>
+
+Hence the need for a translation, in order to avoid a language bias at this pivotal step.
 
 ## 2. Tunneling
 
@@ -79,28 +119,26 @@ It is sometimes easier to take a virtual private server (VPS) than obtaining a f
 Name|A  |B  |C  |
 ---|---|---|---
 Description|Gaming machine  |VPS  |Client  |
-Role|Host the LLM  |Host the tunnel  |Plays around  | 
+Role|Host the models  |Host the tunnel  |Plays with NLP  | 
 User|userA  |userB  | doesn't matter   | 
-IP|doesn't matter  |11.22.33.44  | 55.66.77.88  | 
+IP|doesn't matter  |11.22.33.44  | doesn't matter  | 
 
 The services we need are:
 - A jupyter notebook. It will be exposed at port 8888.
-- An API endpoint. It will be exposed at port 7777.
 - A SSH endpoint. Port 22 of the gaming machine (A) will be exposed through port 2222 of the VPS (B).
 
 ### From A) the gaming machine
 The ports are pushed to the VPS:
 
 ```sh
-ssh -N -R 8888:localhost:8888 -R 7777:localhost:7777 -R 2222:localhost:22 userB@11.22.33.44
+ssh -N -R 8888:localhost:8888 -R 2222:localhost:22 userB@11.22.33.44
 ```
 
 ### From B) the VPS
-The SSH port 2222 has to be opened. Say we want the API to be reachable from a specific IP.
+The SSH port 2222 has to be opened.
 
 ```sh
 sudo ufw allow 2222
-sudo ufw allow from 55.66.77.88 to any port 7777
 sudo ufw reload
 ```
 
