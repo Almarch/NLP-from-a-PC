@@ -3,3 +3,4 @@ services/*/model/*
 services/*/data/*
 *.pdf
 *.pyc
+.env
