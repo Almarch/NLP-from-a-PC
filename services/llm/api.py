@@ -47,7 +47,7 @@ class ChatRequest(BaseModel):
     max_tokens: int = 100
     temperature: float = 0.6
 
-@app.post("/v1/chat/completions")
+@app.post("/api/chat/completions")
 async def chat_completions(request: ChatRequest):
     try:
         input_text = tokenizer.apply_chat_template(
@@ -85,7 +85,7 @@ async def chat_completions(request: ChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/v1/models")
+@app.get("/api/models")
 async def list_models():
     return {
         "object": "list",
@@ -98,6 +98,14 @@ async def list_models():
         ]
     }
 
-@app.get("/info")
+@app.get("/api/version")
+async def api_version():
+    return {"version": "1.0.0"}
+
+@app.get("/api/tags")
+async def api_tags():
+    return {"object": "list", "data": []}
+
+@app.get("/api/device_map")
 async def device_info():
     return model.hf_device_map
