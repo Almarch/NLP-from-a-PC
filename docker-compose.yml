@@ -4,6 +4,8 @@ services:
     build: ./services/llm/
     volumes:
       - ./services/llm/model:/model
+    ports:
+      - 7777:80
     deploy:
       resources:
         reservations:
