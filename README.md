@@ -131,7 +131,7 @@ The services we need are:
 The ports are pushed to the VPS:
 
 ```sh
-ssh -N -R 8888:localhost:8888 -R 2222:localhost:22 userB@11.22.33.44
+ssh -N -R 8888:localhost:8888 -R 8080:localhost:8080 -R 2222:localhost:22 userB@11.22.33.44
 ```
 
 ### From B) the VPS
