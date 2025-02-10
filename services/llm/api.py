@@ -2,9 +2,9 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List, Dict, Any
-import secrets
+from typing import List
 import time
+import uuid
 
 ### load the model
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
@@ -65,7 +65,7 @@ async def chat_completions(request: ChatRequest):
             skip_special_tokens=True
         )
         return {
-            "id": "chatcmpl-" + secrets.token_hex(16),
+            "id": "chatcmpl-" + str(uuid.uuid4()),
             "object": "chat.completion",
             "created": int(time.time()),
             "model": model_name,

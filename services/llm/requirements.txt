@@ -6,4 +6,4 @@ fastapi
 uvicorn
 pydantic
 typing
-secrets
+uuid
