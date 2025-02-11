@@ -161,7 +161,7 @@ sudo ufw reload
 The jupyter notebook is pulled from the VPS:
 
 ```sh
-ssh -N -L 8888:localhost:8888 -L 8080:localhost:8080 -L 7777:localhost:7777  userB@11.22.33.44
+ssh -N -L 8888:localhost:8888 -L 8080:localhost:8080 userB@11.22.33.44
 ```
 
 And the VPS is a direct tunnel to the gaming machine A:
