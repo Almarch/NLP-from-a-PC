@@ -2,7 +2,7 @@
 # To build a new Modelfile based on this, replace FROM with:
 # FROM llama3.1:latest
 
-FROM /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/DeepSeek-R1-Distill-Llama-8B-F16.gguf"
+FROM /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/DeepSeek-R1-Distill-Llama-8B-F16.gguf
 TEMPLATE """{{- if or .System .Tools }}<|start_header_id|>system<|end_header_id|>
 {{- if .System }}
 

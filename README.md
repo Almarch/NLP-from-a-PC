@@ -90,7 +90,7 @@ docker exec -it 123 bash
 
 And register the model:
 ```sh
-ollama create calpaca -f /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
+ollama create myModel -f /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
 ```
 
 A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for any other model.
