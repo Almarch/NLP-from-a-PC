@@ -3,10 +3,12 @@ services:
 
   ollama:
     image: ollama/ollama
+    restart: always
     ports:
       - "7777:11434"  # Expose Ollama API
     volumes:
-      - ./services/ollama/data:/root/.ollama  # Persistent storage for models
+      - ./services/ollama/data:/root/.ollama
+      - ./services/ollama/models:/models
 
   encoder:
     build: ./services/encoder/
@@ -35,6 +37,7 @@ services:
 
   notebook:
     build: ./services/jupyter/
+    restart: always
     volumes:
       - ./services/jupyter/notebook:/project
     depends_on:

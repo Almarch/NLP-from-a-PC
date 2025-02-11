@@ -2,13 +2,6 @@
 
 The goal of this repo is to play with natural language processing with relatively limited resources.
 
-# 🚧 this is a work in progress 🚧
-
-- ✅ All services run and are properly served by at least one API
-- ⚠️ Some further APIs and associated functions are missing 
-- ⚠️ Coherent pipelines are to be developped
-- ⚠️ Some services exhibit questionnable performances and should be tuned or benchmarked
-
 ## 0. Set-up with Docker
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
@@ -23,6 +16,24 @@ docker compose up
 ```
 
 Cuda is highly recommanded for performance. [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
+
+## 1. Download a model
+
+This step should be done from the host machine.
+
+```py
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Define the model you want
+MODEL_NAME = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"  # Change this to any HF model
+OUTPUT_DIR = "./services/ollama/models"
+
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+
+tokenizer.save_pretrained(OUTPUT_DIR)
+model.save_pretrained(OUTPUT_DIR)
+```
 
 ## 1. Services
 
@@ -125,13 +136,15 @@ IP|doesn't matter  |11.22.33.44  | doesn't matter  |
 
 The services we need are:
 - A jupyter notebook. It will be exposed at port 8888.
+- Open-webui, that will be exposed at port 8080.
+- Ollama, that will be exposed at port 7777.
 - A SSH endpoint. Port 22 of the gaming machine (A) will be exposed through port 2222 of the VPS (B).
 
 ### From A) the gaming machine
 The ports are pushed to the VPS:
 
 ```sh
-ssh -N -R 8888:localhost:8888 -R 8080:localhost:8080 -R 2222:localhost:22 userB@11.22.33.44
+ssh -N -R 8888:localhost:8888 -R 8080:localhost:8080 -R 7777:localhost:7777 -R 2222:localhost:22 userB@11.22.33.44
 ```
 
 ### From B) the VPS
@@ -148,7 +161,7 @@ Be careful not to open 8888 or the jupyter notebook would be made public.
 The jupyter notebook is pulled from the VPS:
 
 ```sh
-ssh -N -L 8888:localhost:8888 userB@11.22.33.44
+ssh -N -L 8888:localhost:8888 -L 8080:localhost:8080 -L 7777:localhost:7777  userB@11.22.33.44
 ```
 
 And the VPS is a direct tunnel to the gaming machine A:
