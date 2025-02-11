@@ -8,6 +8,11 @@ services:
       - "7777:11434"
     volumes:
       - ./services/ollama/data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
 
   encoder:
     build: ./services/encoder/

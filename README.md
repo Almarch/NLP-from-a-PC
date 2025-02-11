@@ -74,10 +74,10 @@ docker run --rm -v "./services/ollama/data/models:/models" \
     --convert --outtype f16 "/models/DeepSeek-R1-Distill-Llama-8B"
 ```
 
-Create a model file:
+Add the modelfile. The modelfile was obtained as described below.
 
 ```sh
-echo "FROM /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/DeepSeek-R1-Distill-Llama-8B-F16.gguf" > ./services/ollama/data/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
+cp ./services/ollama/.Modelfile ./services/ollama/data/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
 ```
 
 Once the model is converted, it must be registered to Ollama. Access the running Ollama container, say #123:
@@ -94,6 +94,14 @@ ollama create calpaca -f /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/.Mode
 ```
 
 A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for any other model.
+
+The modelfile for this model was obtained from within the Ollama container:
+
+```sh
+docker exec -it 123 bash
+ollama run llama3.1
+ollama show --modelfile llama3.1
+```
 
 NB:
 - The `{"role": "system", "content":...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
