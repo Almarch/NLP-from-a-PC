@@ -64,6 +64,8 @@ model.save_pretrained("./services/ollama/data/models/" + model_name)
 generation_config.save_pretrained("./services/ollama/data/models/" + model_name)
 ```
 
+Delete the content of `./services/ollama/cache` if the model is big or if you are short on storage.
+
 Then, we will convert the model to Ollama format. To do so, we will use the `llama.cpp` docker image:
 
 ```sh
