@@ -40,36 +40,57 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 import torch
 import os
 
-model_name = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+author = "deepseek-ai"
+model_name = "DeepSeek-R1-Distill-Llama-8B"
 
 tokenizer = AutoTokenizer.from_pretrained(
-    model_name,
-    cache_dir="./services/ollama/models"
+    author + "/" + model_name,
+    cache_dir="./services/ollama/cache"
 )
 model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    cache_dir="./services/ollama/models",
+    author + "/" + model_name,
+    cache_dir="./services/ollama/cache",
     torch_dtype=torch.bfloat16,
     device_map="auto"
 )
 generation_config = GenerationConfig.from_pretrained(
-    model_name,
-    cache_dir="./services/ollama/models",
+    author + "/" + model_name,
+    cache_dir="./services/ollama/cache",
 )
 generation_config.pad_token_id = model.generation_config.eos_token_id
 
 # Save to disk
-tokenizer.save_pretrained("./services/ollama/models/DeepSeek-R1-Distill-Llama-8B")
-model.save_pretrained("./services/ollama/models/DeepSeek-R1-Distill-Llama-8B")
-generation_config.save_pretrained("./services/ollama/models/DeepSeek-R1-Distill-Llama-8B")
+os.makedirs("./services/ollama/data/models/" + model_name, exist_ok=True)
+tokenizer.save_pretrained("./services/ollama/data/models/" + model_name)
+model.save_pretrained("./services/ollama/data/models/" + model_name)
+generation_config.save_pretrained("./services/ollama/data/models/" + model_name)
 ```
 
 Then we will convert the Hugging face model to Ollama using the `llama.cpp` docker image:
 
 ```sh
-docker run --rm -v "./services/ollama/models:/models" \
+docker run --rm -v "./services/ollama/data/models:/models" \
     ghcr.io/ggerganov/llama.cpp:full \
     --convert --outtype f16 "/models/DeepSeek-R1-Distill-Llama-8B"
+```
+
+Create a model file:
+
+```sh
+echo "FROM /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/DeepSeek-R1-Distill-Llama-8B-F16.gguf" > ./services/ollama/data/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
+```
+
+Once the model is converted, it must be registered to Ollama. Access the running Ollama container, say #123:
+
+```sh
+docker compose up -d
+docker ps
+docker exec -it 123 bash
+```
+
+And register the model:
+```sh
+ollama create calpaca -f /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
 ```
 
 A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for any other model.

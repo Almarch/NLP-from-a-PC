@@ -5,10 +5,9 @@ services:
     image: ollama/ollama
     restart: always
     ports:
-      - "7777:11434"  # Expose Ollama API
+      - "7777:11434"
     volumes:
       - ./services/ollama/data:/root/.ollama
-      - ./services/ollama/models:/models
 
   encoder:
     build: ./services/encoder/
