@@ -32,6 +32,8 @@ Use a `venv` if you don't want to mess with your system python.
 
 Let's start by downloading the model from [Hugging face](https://huggingface.co/). A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for another one.
 
+From Python3:
+
 ```py
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 import torch
@@ -73,7 +75,8 @@ docker run --rm -v "./services/ollama/data/models:/models" \
 In the Ollama framework, a model requires a `.Modelfile`. One is provided for the selected model in this project. Be aware that the `.Modelfile` is specific to each model. Simply copy it in the appropriate folder:
 
 ```sh
-cp ./services/ollama/.Modelfile ./services/ollama/data/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
+cp ./services/ollama/.Modelfile \
+   ./services/ollama/data/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
 ```
 
 Now that the model is converted to the appropriate format and accompanied with a `.Modelfile`, it can be registered to Ollama. Access the running Ollama container, say number `123`:
