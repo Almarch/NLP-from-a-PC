@@ -1,51 +1,36 @@
 
 services:
-  llm:
-    build: ./services/llm/
+
+  ollama:
+    image: ollama/ollama
+    restart: always
     volumes:
-      - ./services/llm/model:/model
-    ports:
-      - 7777:80
+      - ./services/ollama/data:/root/.ollama
     deploy:
       resources:
         reservations:
           devices:
             - capabilities: [gpu]
 
-  encoder:
-    build: ./services/encoder/
-    volumes:
-      - ./services/encoder/model:/model
-
-  ocr:
-    build: ./services/ocr/
-
-  tokenizer:
-    build: ./services/tokenizer/
-
-  weaviate:
-    image: semitechnologies/weaviate:1.21.2
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
     restart: always
     depends_on:
-      - encoder
+      - ollama
+    ports:
+      - 8080:8080
     environment:
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      ENABLE_MODULES: 'text2vec-transformers'
-      DEFAULT_VECTORIZER_MODULE: 'text2vec-transformers'
-      TRANSFORMERS_INFERENCE_API: 'http://encoder:80'
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
     volumes:
-      - ./services/weaviate/data:/var/lib/weaviate
+      - ./services/open-webui/data:/app/backend/data
 
   notebook:
     build: ./services/jupyter/
+    restart: always
     volumes:
       - ./services/jupyter/notebook:/project
     depends_on:
-      - llm
-      - encoder
-      - weaviate
-      - ocr
-      - tokenizer
+      - ollama
     ports:
       - 8888:8888

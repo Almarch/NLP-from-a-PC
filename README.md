@@ -2,115 +2,130 @@
 
 The goal of this repo is to play with natural language processing with relatively limited resources.
 
-# 🚧 this is a work in progress 🚧
+It works on an [Open-WebUI](https://github.com/open-webui/open-webui) + [Ollama](https://github.com/ollama/ollama) stack, and encompasses a [Jupyter Notebook](https://github.com/jupyter/notebook).
 
-- ✅ All services run and are properly served by at least one API
-- ⚠️ Some further APIs and associated functions are missing 
-- ⚠️ Coherent pipelines are to be developped
-- ⚠️ Some services exhibit questionnable performances and should be tuned or benchmarked
-
-## 0. Set-up with Docker
+## Deploy
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
 
-The project is containerized with docker.
+The project is containerized with docker. However, some preliminary steps are required in order to prepare the LLM on the host machine.
 
 ```sh
 git clone https://github.com/Almarch/NLP-from-a-PC
 cd NLP-from-a-PC
 docker compose build
-docker compose up
 ```
 
 Cuda is highly recommanded for performance. [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
-## 1. Services
-
-The project contains several services and models, and strictly follows the philosophy: 1 model = 1 service. Some services aren't models though.
-
-A vector data base is available in order to extract relevant context from specific fields.
-
-A Jupyter Notebook is also here for development purposes.
-
-### 1.0. LLM
+## Install the LLM on the host machine
 
 <img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="right"/>
 
-The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked.
+The main idea is to run the LLM locally. In order to download and set up the LLM on the Ollama environment, the following steps should be done from the host machine. The host python3 requires:
 
-NB:
-- The `{"role": "system", "content":...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
-- As far as I understand the `attention_mask` error message should be disregarded as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
+- `torch`
+- `transformers`
+- `accelerate`
 
-The LLM is proficient with a variety of languages including latin and non-latin alphabets.
+Use a `venv` if you don't want to mess with your system python.
 
-### 1.1. Vector data base
+Let's start by downloading the model from [Hugging face](https://huggingface.co/). A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for another one.
 
-A [vector data base](https://weaviate.io/blog/what-is-a-vector-database) is included in the cluster.
+From Python3:
 
-In order to feed the data base from raw pdf, 4 models are needed:
+```py
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+import torch
+import os
 
-<p align="center"><img src="https://github.com/user-attachments/assets/4109c7b2-29b7-4c53-9b3c-753a96ec39f0" width="900px"/></p>
+author = "deepseek-ai"
+model_name = "DeepSeek-R1-Distill-Llama-8B"
 
-A python class `/services/jupyter/notebook/Resource.py` (will) encompasses all these steps and the appropriate API call to the models services in order to help integrating resources to the vector data base.
+tokenizer = AutoTokenizer.from_pretrained(
+    author + "/" + model_name,
+    cache_dir="./services/ollama/cache"
+)
+model = AutoModelForCausalLM.from_pretrained(
+    author + "/" + model_name,
+    cache_dir="./services/ollama/cache",
+    torch_dtype=torch.bfloat16,
+    device_map="auto"
+)
+generation_config = GenerationConfig.from_pretrained(
+    author + "/" + model_name,
+    cache_dir="./services/ollama/cache",
+)
+generation_config.pad_token_id = model.generation_config.eos_token_id
 
-### 1.2. OCR
+os.makedirs("./services/ollama/data/models/" + model_name, exist_ok=True)
+tokenizer.save_pretrained("./services/ollama/data/models/" + model_name)
+model.save_pretrained("./services/ollama/data/models/" + model_name)
+generation_config.save_pretrained("./services/ollama/data/models/" + model_name)
+```
 
-The OCR service is [tesseract](https://tesseract-ocr.github.io/tessdoc/). It accepts any of the following languages:
+Delete the content of `./services/ollama/cache` if the model is big or if you are short on storage.
 
-<div align="center">
-<div style="
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin: auto;
-">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="en"  width="40px">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="fr"  width="40px">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="es"  width="40px">
-</div>
-</div>
-<br>
+Then, we will convert the model to Ollama format. To do so, we will use the `llama.cpp` docker image:
 
-It has shown limitations, for instance this resource could not be processed: [this resource](https://pubmed.ncbi.nlm.nih.gov/6342763/).
+```sh
+docker run --rm -v "./services/ollama/data/models:/models" \
+    ghcr.io/ggerganov/llama.cpp:full \
+    --convert --outtype f16 "/models/DeepSeek-R1-Distill-Llama-8B"
+```
 
-### 1.3. Tokenizer
+In the Ollama framework, a model requires a `.Modelfile`. One is provided for the selected model in this project. Be aware that the `.Modelfile` is specific to each model. Simply copy it in the appropriate folder:
 
-The tokenizers are the transformer models from [spaCy](https://spacy.io/models/). There are 3 models, one for each of these language (the language should therefore be thoroughly mentionned in the API call):
+```sh
+cp ./services/ollama/.Modelfile \
+   ./services/ollama/data/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
+```
 
-<div align="center">
-<div style="
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin: auto;
-">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="en"  width="40px">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="fr"  width="40px">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Spain.svg" alt="es"  width="40px">
-</div>
-</div>
-<br>
+Now that the model is converted to the appropriate format and accompanied with a `.Modelfile`, it can be registered to Ollama. Access the running Ollama container, say number `123`:
 
-### 1.4. Encoder
+```sh
+docker compose up -d
+docker ps
+docker exec -it 123 bash
+```
 
-The encoder model is [this one](https://huggingface.co/sentence-transformers/all-mpnet-base-v2). It takes as input up to 384 words, and yields vectors of size 768. It has been tuned using cosine similarity. It is primarily designed for English:
+And register the model:
 
-<div align="center">
-<div style="
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin: auto;
-">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="en"  width="40px">
-</div>
-</div>
-<br>
+```sh
+ollama create myModel -f /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
+```
+For information, the `.Modelfile` has been obtained from within the Ollama container by running the following commands. However, they do not have to be run again.
 
-Hence the need for a translation, in order to avoid a language bias at this pivotal step.
+```sh
+ollama run llama3.1
+ollama show --modelfile llama3.1
+```
 
-## 2. Tunneling
+## That's all folks
+
+The stack can now be launched using Docker:
+
+```
+docker compose up
+```
+
+The web-ui is available at http://localhost:8080 .
+
+Resource consumptions may be followed-up with:
+
+```
+nvtop
+```
+
+for the VRAM and GPU; and:
+
+```
+htop
+```
+
+for the RAM and CPU.
+
+## Tunneling
 
 <img src="https://github.com/user-attachments/assets/86197798-9039-484b-9874-85f529fba932" width="100px" align="right"/>
 
@@ -124,14 +139,14 @@ User|userA  |userB  | doesn't matter   |
 IP|doesn't matter  |11.22.33.44  | doesn't matter  | 
 
 The services we need are:
-- A jupyter notebook. It will be exposed at port 8888.
+- The web UI and the notebook, available at ports 8080 and 8888 respectively.
 - A SSH endpoint. Port 22 of the gaming machine (A) will be exposed through port 2222 of the VPS (B).
 
 ### From A) the gaming machine
 The ports are pushed to the VPS:
 
 ```sh
-ssh -N -R 8888:localhost:8888 -R 2222:localhost:22 userB@11.22.33.44
+ssh -N -R 8888:localhost:8888 -R 8080:localhost:8080 -R 2222:localhost:22 userB@11.22.33.44
 ```
 
 ### From B) the VPS
@@ -142,13 +157,11 @@ sudo ufw allow 2222
 sudo ufw reload
 ```
 
-Be careful not to open 8888 or the jupyter notebook would be made public.
-
 ### From C) the client
 The jupyter notebook is pulled from the VPS:
 
 ```sh
-ssh -N -L 8888:localhost:8888 userB@11.22.33.44
+ssh -N -L 8888:localhost:8888 -L 8080:localhost:8080 -L 7777:localhost:7777  userB@11.22.33.44
 ```
 
 And the VPS is a direct tunnel to the gaming machine A:
