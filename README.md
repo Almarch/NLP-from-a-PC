@@ -17,45 +17,68 @@ docker compose up
 
 Cuda is highly recommanded for performance. [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
-## 1. Download a model
-
-This step should be done from the host machine.
-
-```py
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-# Define the model you want
-MODEL_NAME = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"  # Change this to any HF model
-OUTPUT_DIR = "./services/ollama/models"
-
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
-
-tokenizer.save_pretrained(OUTPUT_DIR)
-model.save_pretrained(OUTPUT_DIR)
-```
-
 ## 1. Services
 
-The project contains several services and models, and strictly follows the philosophy: 1 model = 1 service. Some services aren't models though.
+The project contains several services:
+- An Ollama,
+- An Open-Webui,
+- A Weaviate database
 
-A vector data base is available in order to extract relevant context from specific fields.
-
-A Jupyter Notebook is also here for development purposes.
-
-### 1.0. LLM
+## 1. Large language model
 
 <img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="right"/>
 
-The LLM is pulled from hugging face. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked.
+The idea is to run the LLM locally. In order to download and set up the LLM on the Ollama environment, the following steps should be done from the host machine. The host python3 requires:
+- `torch`
+- `transformers`
+- `accelerate`
+
+Use a `venv` if you don't want to mess with your system python. From python3:
+
+```py
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+import torch
+import os
+
+model_name = "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+
+tokenizer = AutoTokenizer.from_pretrained(
+    model_name,
+    cache_dir="./services/ollama/models"
+)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    cache_dir="./services/ollama/models",
+    torch_dtype=torch.bfloat16,
+    device_map="auto"
+)
+generation_config = GenerationConfig.from_pretrained(
+    model_name,
+    cache_dir="./services/ollama/models",
+)
+generation_config.pad_token_id = model.generation_config.eos_token_id
+
+# Save to disk
+tokenizer.save_pretrained("./services/ollama/models/DeepSeek-R1-Distill-Llama-8B")
+model.save_pretrained("./services/ollama/models/DeepSeek-R1-Distill-Llama-8B")
+generation_config.save_pretrained("./services/ollama/models/DeepSeek-R1-Distill-Llama-8B")
+```
+
+Then we will convert the Hugging face model to Ollama using the `llama.cpp` docker image:
+
+```sh
+docker run --rm -v "./services/ollama/models:/models" \
+    ghcr.io/ggerganov/llama.cpp:full \
+    --convert --outtype f16 "/models/DeepSeek-R1-Distill-Llama-8B"
+```
+
+A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for any other model.
 
 NB:
 - The `{"role": "system", "content":...}` instructions do not work well. See the [doc](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B#usage-recommendations).
 - As far as I understand the `attention_mask` error message should be disregarded as explained in [this thread](https://stackoverflow.com/questions/69609401/suppress-huggingface-logging-warning-setting-pad-token-id-to-eos-token-id).
 
-The LLM is proficient with a variety of languages including latin and non-latin alphabets.
-
-### 1.1. Vector data base
+## Vector data base
 
 A [vector data base](https://weaviate.io/blog/what-is-a-vector-database) is included in the cluster.
 
