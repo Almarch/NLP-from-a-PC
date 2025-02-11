@@ -1,16 +1,12 @@
 
 services:
-  llm:
-    build: ./services/llm/
-    volumes:
-      - ./services/llm/model:/model
+
+  ollama:
+    image: ollama/ollama
     ports:
-      - 7777:80
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [gpu]
+      - "7777:11434"  # Expose Ollama API
+    volumes:
+      - ./services/ollama/data:/root/.ollama  # Persistent storage for models
 
   encoder:
     build: ./services/encoder/
@@ -42,7 +38,7 @@ services:
     volumes:
       - ./services/jupyter/notebook:/project
     depends_on:
-      - llm
+      - ollama
       - encoder
       - weaviate
       - ocr
@@ -58,7 +54,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      - OLLAMA_BASE_URL=http://llm:80
+      - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
     volumes:
       - ./services/open-webui/data:/app/backend/data
