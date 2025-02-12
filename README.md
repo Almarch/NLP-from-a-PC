@@ -12,7 +12,7 @@ It may work with different specs though but make sure the amount of VRAM + RAM a
 
 The cluster encompasses a [Open-WebUI](https://github.com/open-webui/open-webui) + [Ollama](https://github.com/ollama/ollama) stack, as well as a [Jupyter Notebook](https://github.com/jupyter/notebook) for experimentation.
 
-I didn't take the shortest route, and instead of using a built-in Ollama pipeline to download the model I collected it from [Hugging face](https://huggingface.co/) and manually converted it. [It could have been way easier](https://github.com/Almarch/NLP-from-a-PC/blob/main/README.md#shortcut).
+I didn't take the shortest route, and instead of using a built-in Ollama pipeline to download the model I collected it from [Hugging face](https://huggingface.co/) and manually converted it. [It could have been way easier](https://github.com/Almarch/NLP-from-a-PC#shortcut).
 
 ## Deploy
 
