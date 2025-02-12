@@ -1,8 +1,18 @@
 # Run a LLM with RAG from a Gaming PC
 
-The goal of this repo is to play with natural language processing with relatively limited resources.
+The goal of this repo is to play with natural language processing with relatively limited resources. The specs it has been built with are:
 
-It works on an [Open-WebUI](https://github.com/open-webui/open-webui) + [Ollama](https://github.com/ollama/ollama) stack, and encompasses a [Jupyter Notebook](https://github.com/jupyter/notebook).
+- a linux/amd64 platform ;
+- with git, docker and python3 ;
+- a Nvidia GPU with cuda.
+
+To make use of the later, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
+
+It may work with different specs though but make sure the amount of VRAM + RAM available is soundly higher than the size of the model you intend to use. 
+
+The cluster encompasses a [Open-WebUI](https://github.com/open-webui/open-webui) + [Ollama](https://github.com/ollama/ollama) stack, as well as a [Jupyter Notebook](https://github.com/jupyter/notebook) for experimentation.
+
+I didn't take the shortest route, and instead of using a built-in Ollama pipeline to download the model I collected it from [Hugging face](https://huggingface.co/) and manually converted it. [It could have been way easier](https://github.com/Almarch/NLP-from-a-PC/README.md#shortcut).
 
 ## Deploy
 
@@ -16,8 +26,6 @@ cd NLP-from-a-PC
 docker compose build
 ```
 
-Cuda is highly recommanded for performance. [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
-
 ## Install the LLM on the host machine
 
 <img src="https://github.com/user-attachments/assets/7847f4c8-b8d7-483a-aa43-c00241c15891" width="200px" align="right"/>
@@ -30,7 +38,7 @@ The main idea is to run the LLM locally. In order to download and set up the LLM
 
 Use a `venv` if you don't want to mess with your system python.
 
-Let's start by downloading the model from [Hugging face](https://huggingface.co/). A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for another one.
+Let's start by downloading the model. A [frugal deepseek model](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B) has been picked but it may be changed for another one.
 
 From Python3:
 
@@ -100,6 +108,24 @@ For information, the `.Modelfile` has been obtained from within the Ollama conta
 ollama run llama3.1
 ollama show --modelfile llama3.1
 ```
+
+## Shortcut
+
+<img src="https://github.com/user-attachments/assets/9d93c14f-fa55-4290-a8ce-27222a258f0a" width="250px" align="right"/>
+
+Instead of downloading the model from HF, we could simply have done:
+
+```sh
+git clone https://github.com/Almarch/NLP-from-a-PC
+cd NLP-from-a-PC
+docker compose build
+docker compose up -d
+docker ps
+docker exec -it 123 bash
+ollama run deepseek-r1:8b
+```
+
+See the [Ollama collections](https://ollama.com/library/).
 
 ## That's all folks
 
