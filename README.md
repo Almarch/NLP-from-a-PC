@@ -102,11 +102,11 @@ And register the model:
 ```sh
 ollama create myModel -f /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/.Modelfile
 ```
-For information, the `.Modelfile` has been obtained from within the Ollama container by running the following commands. However, they do not have to be run again.
+For information, the `.Modelfile` has been obtained from within the Ollama container by running the following commands.
 
 ```sh
-ollama run llama3.1
-ollama show --modelfile llama3.1
+ollama pull deepseek-r1:8b
+ollama show --modelfile deepseek-r1:8b
 ```
 
 ## Shortcut
@@ -122,7 +122,7 @@ docker compose build
 docker compose up -d
 docker ps
 docker exec -it 123 bash
-ollama run deepseek-r1:8b
+ollama pull deepseek-r1:8b
 ```
 
 See the [Ollama collections](https://ollama.com/library/).
