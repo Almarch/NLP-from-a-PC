@@ -1,4 +1,4 @@
-FROM /root/.ollama/models/blobs/sha256-6340dc3229b0d08ea9cc49b75d4098702983e17b4c096d57afbbf2ffc813f2be
+FROM /root/.ollama/models/DeepSeek-R1-Distill-Llama-8B/DeepSeek-R1-Distill-Llama-8B-F16.gguf
 TEMPLATE """{{- if .System }}{{ .System }}{{ end }}
 {{- range $i, $_ := .Messages }}
 {{- $last := eq (len (slice $.Messages $i)) 1}}
