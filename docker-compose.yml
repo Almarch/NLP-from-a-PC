@@ -12,18 +12,30 @@ services:
           devices:
             - capabilities: [gpu]
 
-  open-webui:
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    restart: always
+    volumes:
+      - ./services/chroma/data:/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+
+  webui:
     image: ghcr.io/open-webui/open-webui:main
     restart: always
     depends_on:
       - ollama
+      - chroma
     ports:
       - 8080:8080
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - VECTOR_DB_TYPE=chroma
+      - CHROMA_DB_IMPL=chroma
+      - CHROMA_SERVER_HOST=http://chroma:8000
     volumes:
-      - ./services/open-webui/data:/app/backend/data
+      - ./services/webui/data:/app/backend/data
 
   notebook:
     build: ./services/jupyter/
@@ -32,5 +44,6 @@ services:
       - ./services/jupyter/notebook:/project
     depends_on:
       - ollama
+      - chroma
     ports:
       - 8888:8888
