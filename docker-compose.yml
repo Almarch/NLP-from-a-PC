@@ -13,10 +13,10 @@ services:
             - capabilities: [gpu]
 
   chroma:
-    image: ghcr.io/chroma-core/chroma:latest
+    image: chromadb/chroma:latest
     restart: always
     volumes:
-      - ./services/chroma/data:/chroma
+      - ./services/chroma/data:/chromadb
     environment:
       - IS_PERSISTENT=TRUE
 
