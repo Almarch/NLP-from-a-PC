@@ -31,8 +31,6 @@ services:
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
-      - VECTOR_DB_TYPE=chroma
-      - CHROMA_DB_IMPL=chroma
       - CHROMA_SERVER_HOST=http://chroma:8000
     volumes:
       - ./services/webui/data:/app/backend/data
