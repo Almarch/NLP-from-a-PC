@@ -10,5 +10,4 @@ sentence_transformers
 chromadb
 ipywidgets
 pdf2image
-poppler 
 
