@@ -1,5 +1,6 @@
 services/jupyter/notebook/.ipynb_checkpoints/*
 services/*/model/*
+services/*/*/models/*
 services/*/data/*
 services/*/cache/*
 *.pdf
