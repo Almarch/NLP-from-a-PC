@@ -8,3 +8,4 @@ scikit-learn
 matplotlib
 sentence_transformers
 chromadb
+pdf2image
