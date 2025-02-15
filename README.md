@@ -51,23 +51,42 @@ It works for some resources, though it sometimes include typos. However it compl
 
 ### Text splitting
 
-Text splitting is done with an arbitrary rule of 1000 words per chunk - 100 words overlap, which is the default configuration in the web-UI RAG pipeline using the all-MiniLM-L6-v2 encoder. Using a different encoder, the chunks size should be adjusted.
+Text splitting is done with an arbitrary rule of 1000 words per chunk - 100 words overlap, which is the default configuration in the WebUI RAG pipeline using the **all-MiniLM-L6-v2** encoder. Using a different encoder, the chunks size should be adjusted.
 
 Roughly half of the chunks reach the maximum number of tokens with this configuration as experimented in `./services/jupyter/notebook/fill_chroma.ipynb` :
 
-![image](https://github.com/user-attachments/assets/260803a5-bd48-4395-a477-ed42ed6e48ec)
+ <p align="center"><img src="https://github.com/user-attachments/assets/260803a5-bd48-4395-a477-ed42ed6e48ec" width="600px"/></p>
 
 ### Language detection & translation
 
-Most free encoders are language-specific as clearly state in their manual, and experimented in `./services/jupyter/notebook/encoding.ipynb` :
+Most free encoders are language-specific as clearly stated in their documentation and further experimented in `./services/jupyter/notebook/encoding.ipynb` with **all-MiniLM-L6-v2** :
 
+ <p align="center"><img src="https://github.com/user-attachments/assets/46b8ef39-98fe-441f-87f0-4b2ba368985d" width="600px"/></p>
+ 
+"Les chiens sont fidèles" is an exact translations of "Dogs are loyal". I also checked **all-mpnet-base-v2** with a similar result.
+
+The approach I explored was to use the LLM to detect the language, then to perform the translation. Using [Mistral 7b](https://mistral.ai/en/news/announcing-mistral-7b), the translations were pretty good but the text detection was difficult to industrialize. My prompts (`./services/jupyter/notebook/prompts.py`) may very likely be improved, and they may be post-processed further as well.
+
+Noteworthily, my limited resources make the translation step extremely long.
 
 ### Encoding
 
-might have to be fine-tuned for 
+We already mentioned the importance of the encoder especially with regards to:
+- its language, raising the need for translation ;
+- its number of input token, that impacts the chunks size.
 
-(see also https://huggingface.co/Lajavaness/sentence-camembert-large for french embeddings)
+Let's add to the list:
+- its number of output, <i>i.e.</i> the embedding vector size: longer vectors carry more informance hence allow more nuance ;
+- its relevance for the topic.
 
+Especially, for this last point, an encoder destined to a very specific topic should be considered for fine-tuning. Otherwise, only a very limited fraction of the embedding space would be actually occupied by the topic resources, making it difficult to sort and associate them efficiently. Fine-tuning the encoder is an order of magnitude easier than fine-tuning the LLM itself.
+
+For a French RAG project, I keep that one in my back pocket:
+
+<p align="center">
+ <a href="https://huggingface.co/Lajavaness/sentence-camembert-large">
+    <img src="https://www.lesfromagivores.com/img/fromages/camembertdenormandie.png" width="200px"/>
+</a>
 
 ### ChromaDB
 
@@ -75,13 +94,7 @@ The next step will be to use the ChromaDB in a RAG pipeline from Open-WebUI.
 
 ## That's all
 
-The stack can now be launched using Docker:
-
-```
-docker compose up
-```
-
-The web-ui is available at http://localhost:8080 .
+Onced launched with docker, the WebUI is available at http://localhost:8080 and the Jupyter Notebook at http://localhost:8000 .
 
 Resource consumptions may be followed-up with:
 
