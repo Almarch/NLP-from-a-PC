@@ -12,6 +12,8 @@ It may work with different specs though but make sure the amount of VRAM + RAM a
 
 The cluster encompasses a [Open-WebUI](https://github.com/open-webui/open-webui) + [Ollama](https://github.com/ollama/ollama) stack, as well as a [Jupyter Notebook](https://github.com/jupyter/notebook) for experimentation.
 
+🚧 Next step: connect WebUI database with the dedicated chromaDB service ([work in progress](https://github.com/Almarch/NLP-from-a-PC/tree/feature/1db2rule_them_all)) in order to efficiently set up the RAG pipeline
+
 ## Deploy
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
