@@ -127,7 +127,13 @@ ollama pull deepseek-r1:8b
 
 See the [Ollama collections](https://ollama.com/library/).
 
-## That's all folks
+## Fill the Vector DB
+
+A Chroma vector DB is included in the stack. In order to fill it with PDFs, the following pipeline has been developped:
+
+![image](https://github.com/user-attachments/assets/114170ad-4b05-4216-9de2-0f3c80e21660)
+
+## That's all
 
 The stack can now be launched using Docker:
 
