@@ -65,7 +65,7 @@ Most free encoders are language-specific as clearly stated in their documentatio
  
 "Les chiens sont fidèles" is an exact translations of "Dogs are loyal". I also checked **all-mpnet-base-v2** with a similar result.
 
-The approach I explored was to use the LLM to detect the language, then to perform the translation. Using [Mistral 7b](https://mistral.ai/en/news/announcing-mistral-7b), the translations were pretty good but the text detection was difficult to industrialize. My prompts (`./services/jupyter/notebook/prompts.py`) may very likely be improved, and they may be post-processed further as well.
+The approach I explored was to use the LLM to detect the language, then to perform the translation. Using [Mistral 7b](https://mistral.ai/en/news/announcing-mistral-7b), the translations were pretty good but the language detection was difficult to industrialize. My prompts (`./services/jupyter/notebook/prompts.py`) may very likely be improved, and they may be post-processed further as well.
 
 Noteworthily, my limited resources make the translation step extremely long.
 
