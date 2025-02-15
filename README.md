@@ -53,7 +53,7 @@ It works for some resources, though it sometimes include typos. However it compl
 
 ### Text splitting
 
-Text splitting is done with an arbitrary rule of 1000 words per chunk - 100 words overlap, which is the default configuration in the WebUI RAG pipeline using the **all-MiniLM-L6-v2** encoder. Using a different encoder, the chunks size should be adjusted.
+Text splitting is done with an arbitrary rule of 1000 words per chunk - 100 words overlap, which is the default configuration in the WebUI RAG pipeline using the [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) encoder. Using a different encoder, the chunks size should be adjusted.
 
 Roughly half of the chunks reach the maximum number of tokens with this configuration as experimented in `./services/jupyter/notebook/fill_chroma.ipynb` :
 
@@ -61,11 +61,11 @@ Roughly half of the chunks reach the maximum number of tokens with this configur
 
 ### Language detection & translation
 
-Most free encoders are language-specific as clearly stated in their documentation and further experimented in `./services/jupyter/notebook/encoding.ipynb` with **all-MiniLM-L6-v2** :
+Most free encoders are language-specific as clearly stated in their documentation and further experimented in `./services/jupyter/notebook/encoding.ipynb` with [all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) :
 
  <p align="center"><img src="https://github.com/user-attachments/assets/46b8ef39-98fe-441f-87f0-4b2ba368985d" width="600px"/></p>
  
-"Les chiens sont fidèles" is an exact translations of "Dogs are loyal". I also checked **all-mpnet-base-v2** with a similar result.
+"Les chiens sont fidèles" is an exact translations of "Dogs are loyal". I also checked [all-mpnet-base-v2](https://huggingface.co/sentence-transformers/all-mpnet-base-v2) with a similar result.
 
 The approach I explored was to use the LLM to detect the language, then to perform the translation. Using [Mistral 7b](https://mistral.ai/en/news/announcing-mistral-7b), the translations were pretty good but the language detection was difficult to industrialize. My prompts (`./services/jupyter/notebook/prompts.py`) may very likely be improved, and they may be post-processed further as well.
 
