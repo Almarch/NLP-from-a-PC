@@ -163,6 +163,6 @@ Note that `userA`, not `userB`, is required for authentication ; idem for the pa
 
 There are several branches in this repo, corresponding to exploratory steps.
 
-- in [laptop](https://github.com/Almarch/NLP-from-a-PC/tree/laptop) I attempted to run DeepSeek-R1-Distill-Llama-8B from HF on a laptop. It actually "worked", with about 5 minutes / token.
-- with [fastapi_everywhere](https://github.com/Almarch/NLP-from-a-PC/tree/fastapi_everywhere), I downloaded all models (LLM, OCR, encoder) into a distinct service. It still used HF for the LLM.
+- in [laptop](https://github.com/Almarch/NLP-from-a-PC/tree/laptop) I attempted to run [deepseek-llm-7b-chat](https://huggingface.co/deepseek-ai/deepseek-llm-7b-chat) from HF on a laptop. It actually "worked", with about 5 minutes / token.
+- with [fastapi_everywhere](https://github.com/Almarch/NLP-from-a-PC/tree/fastapi_everywhere), I downloaded all models (LLM, OCR, encoder) into a distinct service with a fastAPI. It still used HF for the LLM.
 - I switched to Ollama-WebUI framework from [from_hugging_face](https://github.com/Almarch/NLP-from-a-PC/tree/from_hugging_face). In this branch, I still download a HF model and convert it to Ollama, which was unnecessarily complicated.
