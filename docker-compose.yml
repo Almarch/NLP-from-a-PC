@@ -16,7 +16,7 @@ services:
     image: chromadb/chroma:latest
     restart: always
     volumes:
-      - ./services/webui/chromadb:/chroma/chroma
+      - ./services/webui/vector_db:/chroma/chroma
     environment:
       - IS_PERSISTENT=TRUE
 
