@@ -5,7 +5,7 @@ services:
     image: ollama/ollama
     restart: always
     volumes:
-      - ./services/ollama/data:/root/.ollama
+      - ./services/ollama:/root/.ollama
     deploy:
       resources:
         reservations:
@@ -16,7 +16,7 @@ services:
     image: chromadb/chroma:latest
     restart: always
     volumes:
-      - ./services/chroma/data:/chroma/chroma
+      - ./services/webui/chromadb:/chroma/chroma
     environment:
       - IS_PERSISTENT=TRUE
 
@@ -33,7 +33,7 @@ services:
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
       - CHROMA_SERVER_HOST=http://chroma:8000
     volumes:
-      - ./services/webui/data:/app/backend/data
+      - ./services/webui:/app/backend/data
 
   notebook:
     build: ./services/jupyter/
