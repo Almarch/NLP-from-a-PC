@@ -9,4 +9,3 @@ sentence_transformers
 chromadb
 ipywidgets
 pdf2image
-easyocr
