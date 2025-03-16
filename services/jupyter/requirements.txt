@@ -5,7 +5,6 @@ pandas
 numpy
 scikit-learn
 matplotlib
-sentence_transformers
 chromadb
 ipywidgets
 pdf2image

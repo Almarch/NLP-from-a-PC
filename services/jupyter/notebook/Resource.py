@@ -2,141 +2,156 @@ import requests
 import io
 import os
 import pdf2image
-import pytesseract
-from sentence_transformers import SentenceTransformer
 import chromadb
-import uuid
-import random
-from prompts import is_english,to_english
+import base64
+
+models = {
+    "vision": "llama3.2-vision:11b-instruct-q8_0",
+    "llm": "mistral-nemo:12b-instruct-2407-q8_0",
+    "encoder": "snowflake-arctic-embed2:568m-l-fp16",
+}
 
 class Resource:
-    def __init__(self,path):
-        
-        self.translated = False
+    def __init__(
+        self,
+        path,
+        ollama = "http://ollama:11434/api"
+    ):
+        self.ollama = ollama
         self.embedded = False
         self.stored = False
+        self.name = path
         
         self.name = os.path.splitext(path)[0]
         extension = os.path.splitext(path)[1]
         if extension == ".pdf":
             self.images = pdf2image.convert_from_path(path)
             print(str(len(self.images)) + " pages have been scanned")
-            self.read()
-        
-    def read(self):
-        assert("images" in self.__dict__)
-        self.text = ""
+
+        self.extract_content()
+        self.synthetize()
+        self.store()
+
+    def generate_text(
+        self,
+        prompt,
+        model = models["llm"]
+    ):
+        response = requests.post(
+            self.ollama + "/generate",
+            json = {
+                "model": model,
+                "prompt": prompt,
+                "stream": False
+            }
+        )
+        return(response.json()["response"])
+
+    def image_analysis(
+        self,
+        image,
+        prompt = "what's in this image?",
+        model = models["vision"]
+    ):
+        tmp = io.BytesIO()
+        image.save(tmp, format="JPEG")
+        tmp.seek(0)
+        tmp = base64.b64encode(tmp.read()).decode("utf-8")
+        response = requests.post(
+            self.ollama + "/chat",
+            json = {
+                "model": model,
+                "messages": [
+                    {
+                      "role": "user",
+                      "content": prompt,
+                      "images": [str(tmp)],
+                    }
+                  ],
+                "stream": False
+            }
+        )
+        return(response.json()["message"]["content"])
+
+    def extract_content(self):
+        self.full_text = ""
         for image in self.images:
-            self.text += pytesseract.image_to_string(image, lang='eng+fra+spa')
-        print(str(len(self.text)) + " characters have been read")
-
-    def split(
-        self,
-        size=1000,
-        overlap=100
-    ):
-        assert("text" in self.__dict__)
-        self.chunks = []
-        start = 0
-        while start < len(self.text):
-            end = start + size
-            self.chunks.append(
-                {
-                    "id": uuid.uuid4().hex + uuid.uuid4().hex,
-                    "content": self.text[start:end],
-                    "resource": self.name
-                }
+            self.full_text += self.image_analysis(
+                image = image,
+                prompt = """
+Extrait l'ensemble du texte de ces images.
+Ne rajoute pas de commentaire ni de caractère spéciaux.
+Ne traduis pas le texte.
+"""
             )
-            start += size - overlap
-        print("Text has been split into "+ str(len(self.chunks)) + " chunks")
-        return(self)
-            
-    def translate(
-        self,
-        skip = False,
-        n_samples = 5,
-        threshold = 4,
-        ollama = "http://ollama:11434/api/generate"
-    ):
-        assert("chunks" in self.__dict__)
-        chunks = random.choices(self.chunks, k = n_samples) # tirage avec remise
 
-        # detect the language
-        if not skip:
-            chunks_are_english = []
-            for chunk in chunks:
-                response = requests.post(
-                    ollama,
-                    json = {
-                        "model": "mistral:latest",
-                        "prompt": is_english(chunk["content"]),
-                        "stream": False
-                    }
-                )
-                print(response.json()["response"])
-                chunks_are_english.append(response.json()["response"] in ["Is English: true"," Is English: true"])
-            
-        # translate all chunks
-        if skip or sum(chunks_are_english) >= threshold:
-            for i in range(len(self.chunks)):
-                self.chunks[i]["translated"] = self.chunks[i]["content"]
-            print("Text is already in English")
-            
-        else:
-            print("Translating...")
-            for i in range(len(self.chunks)):
-                response = requests.post(
-                    ollama,
-                    json = {
-                        "model": "mistral:latest",
-                        "prompt": to_english(self.chunks[i]["content"]),
-                        "stream": False
-                    }
-                )
-                self.chunks[i]["translated"] = response.json()["response"][len("To English: "):]
-            print("All chunks have been translated to English")
-        self.translated = True
-        return(self)
+    def describe_content(self):
+        self.full_description = ""
+        for i, image in enumerate(self.images):
+            self.full_description += "\n#Page " + str(i) + "\n" + self.image_analysis(
+                image = image,
+                prompt = """
+Synthétise le contenu de cette image en Français.
+"""
+            )
+
+    def synthetize(
+        self,
+        max_words = 2000
+    ):
+        self.describe_content()
+        self.synthese = self.generate_text(
+            prompt = """
+Tu es un assistant spécialisé dans la synthèse de texte.
+Un texte t'es confié et tu en réalises la synthèse.
+La synthèse doit être en français.
+La synthèse doit mentionner l'intention de l'auteur ainsi que les éléments les plus répétitifs.
+La synthèse doit faire maximum """ + str(max_words) + """ caractères.
+
+###
+
+Voici le texte:
+""" + self.full_description
+        )
 
     def embed(
         self,
-        encoder = "sentence-transformers/all-MiniLM-L6-v2",
-        cache = "/project/models/",
+        prompt,
+        model = models["encoder"]
     ):
-        assert(self.translated)
-        model = SentenceTransformer(encoder, cache_folder = cache)
-        for i in range(len(self.chunks)):
-            self.chunks[i]["tokens"] = model.tokenize([self.chunks[i]["translated"]])
-            self.chunks[i]["vector"] = model.encode(self.chunks[i]["translated"])
-        print("All chunks have been embedded")
-        self.embedded = True
-        self.encoder = encoder
-        return(self)
+        response = requests.post(
+            self.ollama + "/embeddings",
+            json = {
+                "model": "snowflake-arctic-embed2:568m-l-fp16",
+                "prompt": prompt,
+            }
+        )
+        return response.json()["embedding"]
+
+    def embed_whole(
+        self
+    ):
+        json = {
+            "resource": self.name,
+            "text": self.full_text,
+            "synthese": self.synthese,
+        }
+        vector = embed(self.synthese)
+        return json, vector
 
     def store(
         self,
-        collection,
+        collection = "rag",
         host = "chroma",
         port = 8000
     ):
-        assert(self.embedded)
+        json, vector = self.embed_whole()
+        
         client = chromadb.HttpClient(host = host, port = port)
         collection = client.get_or_create_collection(name = collection)
-        for i in range(len(self.chunks)):
-            collection.add(
-                ids = self.chunks[i]["id"],
-                embeddings = self.chunks[i]["vector"],
-                metadatas = {
-                    "chunk": i,
-                    "text": self.chunks[i]["content"],
-                    "resource": self.name,
-                    "translated": self.translated,
-                    "ntokens": len(self.chunks[i]["tokens"]),
-                    "encoder": self.encoder
-                }
-            )
-        self.stored = True
+        collection.add(
+            ids = self.name,
+            embeddings = vector,
+            metadatas = json
+        )
         print("Stored in the database")
-
-
-        
