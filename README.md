@@ -14,6 +14,14 @@ The cluster encompasses a [Open-WebUI](https://github.com/open-webui/open-webui)
 
 🚧 Next step: connect WebUI database with the dedicated chromaDB service ([work in progress](https://github.com/Almarch/NLP-from-a-PC/tree/feature/1db2rule_them_all)) in order to efficiently set up the RAG pipeline
 
+## Secure
+
+Generate SSL keys in order to secure all communications:
+
+```sh
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nlp-from-a-pc/services/nginx/ssl/ssl.key -out nlp-from-a-pc/services/nginx/ssl/ssl.crt -subj "/CN=localhost"
+```
+
 ## Deploy
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
@@ -133,14 +141,15 @@ The services we need are:
 The ports are pushed to the VPS:
 
 ```sh
-ssh -N -R 8888:localhost:8888 -R 8080:localhost:8080 -R 2222:localhost:22 userB@11.22.33.44
+ssh -N -R 8080:localhost:8080 -R 8888:localhost:8888 -R 2222:localhost:22 userB@11.22.33.44
 ```
 
 ### From B) the VPS
-The SSH port 2222 has to be opened.
+The SSH ports 2222 and 443 have to be opened.
 
 ```sh
 sudo ufw allow 2222
+sudo ufw allow 8080
 sudo ufw reload
 ```
 
@@ -148,7 +157,7 @@ sudo ufw reload
 The jupyter notebook is pulled from the VPS:
 
 ```sh
-ssh -N -L 8888:localhost:8888 -L 8080:localhost:8080 userB@11.22.33.44
+ssh -N -L 8888:localhost:8888 userB@11.22.33.44
 ```
 
 And the VPS is a direct tunnel to the gaming machine A:

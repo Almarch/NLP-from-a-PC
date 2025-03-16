@@ -1,8 +1,9 @@
 services/jupyter/notebook/.ipynb_checkpoints/*
-services/*/model/*
-services/*/*/models/*
-services/*/data/*
-services/*/cache/*
+services/jupyter/notebook/models/*
+services/nginx/ssl/*
+services/jupyter/notebook/data/*
+services/webui/*
+services/ollama/*
 *.pdf
 *.pyc
 .env

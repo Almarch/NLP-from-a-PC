@@ -11,6 +11,8 @@ services:
         reservations:
           devices:
             - capabilities: [gpu]
+    networks:
+      - internal_network
 
   chroma:
     image: chromadb/chroma:latest
@@ -19,6 +21,8 @@ services:
       - ./services/webui/vector_db:/chroma/chroma
     environment:
       - IS_PERSISTENT=TRUE
+    networks:
+      - internal_network
 
   webui:
     image: ghcr.io/open-webui/open-webui:main
@@ -26,14 +30,14 @@ services:
     depends_on:
       - ollama
       - chroma
-    ports:
-      - 8080:8080
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
       - CHROMA_SERVER_HOST=http://chroma:8000
     volumes:
       - ./services/webui:/app/backend/data
+    networks:
+      - internal_network
 
   notebook:
     build: ./services/jupyter/
@@ -43,5 +47,23 @@ services:
     depends_on:
       - ollama
       - chroma
+    networks:
+      - internal_network
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    volumes:
+      - ./services/nginx/ssl/:/etc/nginx/ssl/:ro
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - 8888:8888
+      - 8080:8080
+      - 8888:8888  
+    depends_on:
+      - webui
+    networks:
+      - internal_network
+      
+networks:
+  internal_network:
+      driver: bridge

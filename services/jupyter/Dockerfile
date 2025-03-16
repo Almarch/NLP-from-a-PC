@@ -4,7 +4,6 @@ FROM jupyter/base-notebook:latest
 USER root
 RUN apt-get update && apt-get install -y \
     poppler-utils \
-    tesseract-ocr \
     && apt-get clean
 USER jovyan
 
