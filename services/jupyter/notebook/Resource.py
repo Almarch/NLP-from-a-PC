@@ -6,8 +6,8 @@ import chromadb
 import base64
 
 models = {
-    "vision": "llama3.2-vision:11b-instruct-q8_0",
-    "llm": "mistral-nemo:12b-instruct-2407-q8_0",
+    "vision": "llama3.2-vision:11b-instruct-q4_K_M",
+    "llm": "mistral-nemo:12b-instruct-2407-q4_0",
     "encoder": "snowflake-arctic-embed2:568m-l-fp16",
 }
 
@@ -136,7 +136,7 @@ Voici le texte:
             "text": self.full_text,
             "synthese": self.synthese,
         }
-        vector = embed(self.synthese)
+        vector = self.embed(self.synthese)
         return json, vector
 
     def store(
