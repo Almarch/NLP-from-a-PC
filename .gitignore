@@ -4,6 +4,7 @@ services/nginx/ssl/*
 services/jupyter/notebook/data/*
 services/webui/*
 services/ollama/*
+services/chroma/*
 *.pdf
 *.pyc
 .env
