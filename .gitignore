@@ -5,6 +5,7 @@ services/jupyter/notebook/data/*
 services/webui/*
 services/ollama/*
 services/chroma/*
+services/agent/logs/*
 *.pdf
 *.pyc
 .env
