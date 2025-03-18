@@ -1,0 +1,453 @@
+﻿Numero,Nom,Type,Description
+1,Bulbizarre,Pokémon Graine,"Au matin de sa vie, la graine sur
+son dos lui fournit les éléments
+dont il a besoin pour grandir."
+2,Herbizarre,Pokémon Graine,"Lorsque le bourgeon sur son dos
+éclot, il répand un doux parfum
+pour célébrer sa floraison."
+3,Florizarre,Pokémon Graine,"Le parfum de sa fleur se fait plus
+pénétrant les lendemains de pluie.
+Cela appâte les autres Pokémon."
+4,Salamèche,Pokémon Lézard,"La flamme de sa queue symbolise sa
+vitalité. Elle est intense quand il
+est en bonne santé."
+5,Reptincel,Pokémon Flamme,"La nuit, la queue ardente du Reptincel
+brille comme une étoile dans son
+repaire montagneux."
+6,Dracaufeu,Pokémon Flamme,"On raconte que la flamme du
+Dracaufeu s’intensifie après
+un combat difficile."
+7,Carapuce,Pokémon Minitortue,"Il se réfugie dans sa carapace
+et réplique en éclaboussant
+l’ennemi à la première occasion."
+8,Carabaffe,Pokémon Tortue,"On prétend qu’il vit 10 000 ans.
+Sa queue duveteuse est un
+symbole de longévité populaire."
+9,Tortank,Pokémon Carapace,"Les trombes d’eau projetées par
+les canons de sa carapace peuvent
+percer le métal le plus résistant."
+10,Chenipan,Pokémon Ver,"Ses antennes rouges libèrent une
+puanteur qui repousse l’ennemi.
+Il grandit par mues régulières."
+11,Chrysacier,Pokémon Cocon,"Son corps frêle est protégé par sa
+carapace d’acier. Il encaisse les
+coups durs en attendant d’évoluer."
+12,Papilusion,Pokémon Papillon,"Il raffole du nectar des fleurs. Il
+est capable de repérer la plus
+petite quantité de pollen."
+13,Aspicot,Pokémon Insectopic,"Il mange chaque jour son poids en
+feuilles. Il utilise l’aiguillon sur sa
+tête pour repousser l’ennemi."
+14,Coconfort,Pokémon Cocon,"Il se cache sous les feuilles et les
+branches pour fuir les prédateurs
+en attendant d’évoluer."
+15,Dardargnan,Pokémon Guêpoison,"Il virevolte rapidement autour de
+l’ennemi et frappe de son dard
+empoisonné avant de décamper."
+16,Roucool,Pokémon Minoiseau,"Ce Pokémon docile préfère éviter
+le combat. Toutefois, il se montre
+très féroce quand on l’agresse."
+17,Roucoups,Pokémon Oiseau,"Il survole son vaste territoire en
+quête d’une proie avant de fondre
+sur elle toutes griffes en avant."
+18,Roucarnage,Pokémon Oiseau,"En battant des ailes de toutes ses
+forces, Roucarnage génère une
+rafale à en déraciner les arbres."
+19,Rattata,Pokémon Souris,"D’une prudence extrême, sa nature
+robuste lui permet de s’adapter à
+tous les terrains."
+20,Rattatac,Pokémon Souris,"Il grignote sans cesse pour apaiser
+la poussée de ses crocs. Il peut
+transpercer un mur de parpaings."
+21,Piafabec,Pokémon Minoiseau,"Il fait battre vigoureusement ses
+petites ailes pour voler et cherche
+à manger dans l’herbe avec le bec."
+22,Rapasdepic,Pokémon Bec-Oiseau,"Il a assez d’énergie pour voler
+toute la journée avec ses grandes
+ailes. Il frappe de son bec acéré."
+23,Abo,Pokémon Serpent,"Il se faufile dans l’herbe sans un
+bruit et frappe dans le dos quand
+sa proie s’y attend le moins."
+24,Arbok,Pokémon Cobra,"Il utilise la marque sur son ventre
+pour intimider l’ennemi. Il étouffe
+l’ennemi pétrifié par la peur."
+25,Pikachu,Pokémon Souris,"Il lui arrive de remettre d’aplomb
+un Pikachu allié en lui envoyant
+une décharge électrique."
+26,Raichu,Pokémon Souris,"Il se protège des décharges grâce
+à sa queue qui dissipe l’électricité
+dans le sol."
+27,Sabelette,Pokémon Souris,"Il vit sur des terres arides épargnées
+par la pluie. Il se roule en boule pour
+se protéger."
+28,Sablaireau,Pokémon Souris,"Il se met en boule pour percuter
+l’ennemi. Ses épines aiguisées
+font beaucoup de dégâts."
+29,Nidoran♀,Pokémon Vénépic,"Bien qu’il rechigne à se battre, une
+goutte du poison sécrété par ses
+piquants peut s’avérer fatale."
+30,Nidorina,Pokémon Vénépic,"Ce Pokémon dresse ses piquants
+en cas de danger. Ils poussent
+moins vite que ceux de Nidorino."
+31,Nidoqueen,Pokémon Perceur,"Son corps est recouvert d’écailles
+solides. Il donnera sa vie pour
+secourir les petits de son terrier."
+32,Nidoran♂,Pokémon Vénépic,"Il jauge le terrain en laissant
+ses oreilles dépasser de l’herbe.
+Il se défend avec sa corne toxique."
+33,Nidorino,Pokémon Vénépic,"D’un tempérament violent, il
+empale l’ennemi sur sa corne
+qui distille un poison puissant."
+34,Nidoking,Pokémon Perceur,"Un coup de sa puissante queue
+peut briser un poteau téléphonique
+comme une allumette."
+35,Mélofée,Pokémon Fée,"On dit que ceux qui voient danser
+un groupe de Mélofée sous la pleine
+lune connaîtront un grand bonheur."
+36,Mélodelfe,Pokémon Fée,"Il est très farouche et se laisse
+rarement approcher. De plus, il
+détecte les sons à plus d’1 km."
+37,Goupix,Pokémon Renard,"Il envoie des boules de feu. Avec
+l’âge, ses six queues en forment de
+nouvelles."
+38,Feunard,Pokémon Renard,"On raconte que ses neuf queues
+détiennent un pouvoir mystique.
+Il peut vivre pendant mille ans."
+39,Rondoudou,Pokémon Bouboule,"Lorsqu’il roule ses grands yeux
+ronds, il entonne une berceuse
+qui endort son auditoire."
+40,Grodoudou,Pokémon Bouboule,"Sa fourrure est d’une douceur
+incomparable au toucher. Il 
+peut gonfler en aspirant de l’air."
+41,Nosferapti,Pokémon Chovsouris,"Il se repère dans l’espace grâce
+aux ultrasons émis par sa gueule."
+42,Nosferalto,Pokémon Chovsouris,"Ses crocs acérés et creux peuvent
+pénétrer la plus épaisse des peaux
+et sucer le sang de la victime."
+43,Mystherbe,Pokémon Racine,"En journée, il plante ses pieds-racines
+dans le sol. La nuit, il se promène en
+semant des graines."
+44,Ortide,Pokémon Racine,"L’odeur du nectar de sa bouche est
+si répugnante qu’elle agresse les
+narines à deux kilomètres."
+45,Rafflesia,Pokémon Fleur,"Ses pétales sont les plus grands
+du monde. Il marche en répandant
+un pollen extrêmement allergène."
+46,Paras,Pokémon Champignon,"Des champignons appelés “tochukaso”
+poussent sur son dos. Ils évoluent
+avec le Paras hôte."
+47,Parasect,Pokémon Champignon,"Un champignon parasite plus gros
+que Parasect contrôle son corps.
+Il répand des spores empoisonnées."
+48,Mimitoss,Pokémon Vermine,"Ses grands yeux sont en fait des
+amas d’yeux minuscules. La nuit,
+il est attiré par la lumière."
+49,Aéromite,Pokémon Papipoison,"Il répand ses écailles poudreuses
+en battant des ailes. Elles sont
+toxiques au toucher."
+50,Taupiqueur,Pokémon Taupe,"Un Pokémon qui vit sous terre.
+Habitué aux souterrains, il fuit la
+lumière du jour."
+51,Triopikeur,Pokémon Taupe,"Ses trois têtes creusent le sol à
+tour de rôle. Il peut atteindre des
+profondeurs de 100 kilomètres."
+52,Miaouss,Pokémon Chadégout,"Son regard s’anime à la vue
+d’un objet brillant. C’est un
+Pokémon nocturne."
+53,Persian,Pokémon Chadeville,"Un Pokémon très snob. La taille du
+joyau qui orne son front alimente
+bien des débats parmi ses fans."
+54,Psykokwak,Pokémon Canard,"Ses pouvoirs déconcertants
+et mystérieux lui font subir
+de constantes migraines."
+55,Akwakwak,Pokémon Canard,"Ses membres palmés et son corps
+parfaitement adapté font de lui
+un nageur exceptionnel."
+56,Férosinge,Pokémon Porsinge,"Ils vivent en colonies sylvestres.
+Quand un Férosinge s’énerve, toute
+la colonie suit son exemple."
+57,Colossinge,Pokémon Porsinge,"Il grogne quand on le toise, rugit
+quand on s’enfuit et devient fou
+de rage quand on le frappe."
+58,Caninos,Pokémon Chiot,"Un Pokémon très loyal. Il restera
+immobile jusqu’à ce que son
+Dresseur lui donne un ordre."
+59,Arcanin,Pokémon Légendaire,"Son port altier et son attitude
+fière ont depuis longtemps
+conquis le cœur des hommes."
+60,Ptitard,Pokémon Têtard,"Sa peau est si mince qu’on voit
+ses organes internes. Il tient
+à peine sur ses nouveaux pieds."
+61,Têtarte,Pokémon Têtard,"La spirale qui orne son ventre ondule
+doucement. Celui qui la fixe est saisi
+d’une étrange torpeur."
+62,Tartard,Pokémon Têtard,"Il possède de sacrés biscoteaux.
+Il peut parcourir sans relâche
+l’Océan Pacifique."
+63,Abra,Pokémon Psy,"L’utilisation de ses pouvoirs
+mentaux le fatigue tellement
+qu’il dort 18 heures par jour."
+64,Kadabra,Pokémon Psy,"Il fixe sa cuillère d’argent afin de
+concentrer son esprit et d’émettre
+un maximum d’ondes alpha."
+65,Alakazam,Pokémon Psy,"On dit que les cuillères qu’il tient
+en permanence ont été créées
+par la puissance de son esprit."
+66,Machoc,Pokémon Colosse,"Malgré sa petite taille, sa force
+lui permet de soulever plusieurs
+Racaillou à la fois."
+67,Machopeur,Pokémon Colosse,"Il soulève les plus lourdes charges
+avec plaisir et facilité. Il donne un
+coup de main tout en s’entraînant!"
+68,Mackogneur,Pokémon Colosse,"La puissance et la rapidité de ses
+quatre bras puissants font des
+ravages sur ses adversaires."
+69,Chétiflor,Pokémon Fleur,"Il préfère les climats chauds et
+humides. Ses lianes peuvent
+capturer une proie en un clin d’œil."
+70,Boustiflor,Pokémon Carnivore,"Un Pokémon végétal. Il capture les
+proies étourdies en les endormant
+à l’aide d’une poudre toxique."
+71,Empiflor,Pokémon Carnivore,"Sa bouche sécrète un fluide à
+l’odeur de miel, qui s’avère être
+un acide extrêmement corrosif."
+72,Tentacool,Pokémon Mollusque,"Presque entièrement composé d’eau,
+son corps a tendance à se dessécher
+sur la terre ferme."
+73,Tentacruel,Pokémon Mollusque,"Ses 80 tentacules lui permettent
+d’emprisonner ses adversaires
+dans un redoutable filet venimeux."
+74,Racaillou,Pokémon Roche,"Au repos, rien ne le distingue d’un
+vulgaire caillou. Malheur à ceux qui
+lui marchent dessus par mégarde!"
+75,Gravalanch,Pokémon Roche,"Il dévale les montagnes pour se
+déplacer. Une fois qu’il a pris tout
+son élan, dur dur de l’arrêter!"
+76,Grolem,Pokémon Titanesque,"Aucun explosif ne pourrait entamer
+sa carapace de pierre. Il mue une
+fois par an."
+77,Ponyta,Pokémon Cheval Feu,"Chancelantes à la naissance, ses
+pattes deviennent très vite sûres
+et solides à force de galoper."
+78,Galopa,Pokémon Cheval Feu,"Au grand galop, sa crinière de feu
+disperse au vent une myriade
+d’étincelles ardentes."
+79,Ramoloss,Pokémon Crétin,"Bien que lent, c’est un pêcheur
+adroit qui utilise sa queue. Elle
+est insensible aux morsures."
+80,Flagadoss,Pokémon Symbiose,"Ce grand benêt connaît des éclairs
+de lucidité lorsque le Kokiyas de sa
+queue se met à mordre."
+81,Magnéti,Pokémon Magnétique,"Plus la rotation de ses extrémités
+est rapide, plus la force du champ
+magnétique qu’il génère est grande."
+82,Magnéton,Pokémon Magnétique,"Des groupes apparaissent si des
+taches solaires couvrent le soleil.
+Ils brouillent les télévisions."
+83,Canarticho,Pokémon Canard Fou,"Il ne peut pas vivre sans son
+légume, c’est pourquoi il le
+protégera au péril de sa vie."
+84,Doduo,Pokémon Duoiseau,"Ses deux cerveaux semblent
+communiquer leurs émotions
+grâce à un lien télépathique."
+85,Dodrio,Pokémon Trioiseau,"Quand Doduo connaît cette étrange
+évolution, l’une de ses têtes se
+dédouble. Il atteint les 60 km/h."
+86,Otaria,Pokémon Otarie,"Un habitant des icebergs.
+En mer, il utilise la corne sur
+sa tête pour briser la banquise."
+87,Lamantine,Pokémon Otarie,"Son corps est couvert d’un grand
+manteau blanc qui, dans la neige, le
+dissimule aux yeux des prédateurs."
+88,Tadmorv,Pokémon Dégueu,"Il est né d’un torrent de boue
+exposé aux rayons X de la lune.
+Il vit dans les ordures."
+89,Grotadmorv,Pokémon Dégueu,"Son corps exsude un fluide toxique
+qui tue instantanément les plantes
+et les arbres au contact."
+90,Kokiyas,Pokémon Bivalve,"Il nage à reculons en ouvrant et en
+refermant ses deux coquilles. Il
+laisse traîner sa large langue."
+91,Crustabri,Pokémon Bivalve,"Il se défend en fermant sa coquille
+et projette des piquants qui
+repoussent ses agresseurs."
+92,Fantominus,Pokémon Gaz,"Son corps composé de gaz toxique
+pourrait asphyxier n’importe qui
+en quelques secondes."
+93,Spectrum,Pokémon Gaz,"Il adore se tapir dans l’ombre et
+faire frissonner ses proies en leur
+touchant l’épaule."
+94,Ectoplasma,Pokémon Ombre,"Si vous croisez un regard
+inquiétant qui perce la nuit,
+c’est sûrement un Ectoplasma."
+95,Onix,Pokémon Serpenroc,"Il se nourrit des pierres qu’il
+rencontre en creusant le sol.
+Il peut creuser à 80 km/h!"
+96,Soporifik,Pokémon Hypnose,"Son grand nez lui permet de lire
+les rêves d’autrui. Il adore les
+songes amusants."
+97,Hypnomade,Pokémon Hypnose,"La vue de son pendule oscillant
+endort en trois secondes, même
+quand on vient de se réveiller."
+98,Krabby,Pokémon Doux Crabe,"Il creuse son terrier sur des plages
+sablonneuses. Ses pinces repoussent
+si on les brise."
+99,Krabboss,Pokémon Pince,"Sa grande pince possède une puissance
+de 10 000 chevaux. Son poids la rend
+difficile à manier."
+100,Voltorbe,Pokémon Balle,"Il ressemble à une Poké Ball. Ce
+Pokémon dangereux peut exploser
+ou s’électrifier au toucher."
+101,Électrode,Pokémon Balle,"Il se laisse porter par les vents
+lorsque son corps est gonflé
+d’électricité à en éclater."
+102,Noeunoeuf,Pokémon Œuf,"Ces six œufs communiquent par
+télépathie. Ils peuvent se réunir
+rapidement si on les sépare."
+103,Noadkoko,Pokémon Fruitpalme,"On l’appelle “jungle sur pattes”.
+Si une tête devient trop grosse,
+elle tombe et produit un Noeunoeuf."
+104,Osselait,Pokémon Solitaire,"Il pleure en pensant à sa mère
+disparue, et ses larmes résonnent
+dans son crâne creux."
+105,Ossatueur,Pokémon Gard’Os,"Ce Pokémon sauvage possède des os
+depuis sa naissance. Il s’en sert
+pour combattre avec dextérité."
+106,Kicklee,Pokémon Latteur,"Ses pattes élastiques s’allongent, ce
+qui ne manque jamais de surprendre
+au premier combat."
+107,Tygnon,Pokémon Puncheur,"Même le béton cède sous ses 
+poings dévastateurs. Au combat, il
+s’essouffle au bout de 3 minutes."
+108,Excelangue,Pokémon Lécheur,"Quand il déploie sa langue de près
+de deux mètres, sa queue s’agite.
+Elles seraient reliées entre elles."
+109,Smogo,Pokémon Gaz Mortel,"Il flotte en retenant des gaz plus
+légers que l’air. Ceux-ci sont
+explosifs, en plus d’être fétides."
+110,Smogogo,Pokémon Gaz Mortel,"Il grandit en absorbant les gaz des
+détritus. Des triplés existent, bien
+qu’ils soient fort rares."
+111,Rhinocorne,Pokémon Piquant,"Ses puissantes charges pourraient
+démolir n’importe quel bâtiment.
+Dommage qu’il soit stupide."
+112,Rhinoféros,Pokémon Perceur,"La station debout a libéré ses
+pattes avant et l’a rendu plus
+intelligent, mais il est distrait."
+113,Leveinard,Pokémon Œuf,"Ce Pokémon très serviable distribue
+ses œufs hautement nutritifs aux
+humains et Pokémon blessés."
+114,Saquedeneu,Pokémon Vigne,"Il se cache derrière des lianes
+bleues recouvertes d’un fin duvet.
+Il est chatouilleux."
+115,Kangourex,Pokémon Maternel,"Il élève ses petits dans sa poche
+ventrale. Il attend d’être en lieu
+sûr pour les laisser jouer dehors."
+116,Hypotrempe,Pokémon Dragon,"Il niche à l’ombre du corail. Quand
+il se sent menacé, il disparaît
+dans un nuage d’encre opaque."
+117,Hypocéan,Pokémon Dragon,"Son épine dorsale le protège.
+Ses os et ses nageoires sont très
+prisés en médecine traditionnelle."
+118,Poissirène,Pokémon Poisson,"Malgré son élégance quand il
+nage, ses coups de corne sont
+redoutables."
+119,Poissoroy,Pokémon Poisson,"En automne, à la saison des amours,
+il fait des réserves de graisse et
+arbore des couleurs chatoyantes."
+120,Stari,Pokémon Étoile,"Même amoché, son corps se régénère
+tant que le noyau rouge est intact.
+Le noyau s’illumine à minuit."
+121,Staross,Pokémon Mystérieux,"Un noyau rouge trône en son centre.
+Il envoie des signaux radio mystérieux
+vers le ciel nocturne."
+122,M. Mime,Pokémon Bloqueur,"En modifiant les molécules de l’air
+du bout de ses doigts, il parvient
+à créer un mur invisible devant lui."
+123,Insécateur,Pokémon Mante,"À force de trancher des objets
+solides, les faux de ses bras
+sont très aiguisées."
+124,Lippoutou,Pokémon Humanoïde,"Son cri ressemble à des paroles
+humaines. Mais nul n’est jamais
+parvenu à les comprendre."
+125,Élektek,Pokémon Électrique,"Il fait tournoyer ses bras pour
+donner de la force à ses coups.
+Profitez-en pour filer!"
+126,Magmar,Pokémon Crache-Feu,"Quand il respire profondément, des
+vagues de chaleur émanent de son
+corps et le rendent difficile à voir."
+127,Scarabrute,Pokémon Scarabée,"Il serre les proies dans ses pinces
+pour les trancher en deux. S’il n’y
+arrive pas, il les jette au loin."
+128,Tauros,Pokémon Buffle,"Après avoir choisi sa cible, il fonce
+dessus tête baissée. Il est réputé
+pour sa nature violente."
+129,Magicarpe,Pokémon Poisson,"Un vénérable Magicarpe peut
+franchir une montagne en utilisant
+Trempette. Mais c’est tout..."
+130,Léviator,Pokémon Terrifiant,"Quand il se laisse emporter par la
+rage, il ne se calme qu’après avoir
+détruit tout ce qui l’entoure."
+131,Lokhlass,Pokémon Transport,"Il aime naviguer en portant des
+humains et des Pokémon sur son
+dos. Il comprend le langage humain."
+132,Métamorph,Pokémon Morphing,"Il a la capacité de modifier sa
+structure cellulaire pour prendre
+l’apparence de ce qu’il voit."
+133,Évoli,Pokémon Évolutif,"Son ADN particulier lui permet de
+s’adapter très rapidement à son
+environnement."
+134,Aquali,Pokémon Bulleur,"Sa composition moléculaire est
+proche de celle de l’eau, ce qui
+lui permet de se liquéfier."
+135,Voltali,Pokémon Orage,"Face au danger, il fait appel à
+l’électricité pour dresser ses
+poils et lancer des décharges."
+136,Pyroli,Pokémon Flamme,"L’air qu’il inspire est chauffé par
+la glande enflammée de son corps,
+atteignant les 1 700 °C."
+137,Porygon,Pokémon Virtuel,"Ce Pokémon créé par des
+scientifiques peut arpenter
+librement le cyberespace."
+138,Amonita,Pokémon Spirale,"Un Pokémon ramené à la vie par
+la science à partir d’un fossile. Il
+peuplait autrefois les mers."
+139,Amonistar,Pokémon Spirale,"On pense que ce Pokémon a disparu
+parce que sa coquille en spirale
+était devenue trop grosse."
+140,Kabuto,Pokémon Carapace,"On pense qu’il peuplait les plages
+il y a 300 millions d’années. Il est
+protégé par une coquille robuste."
+141,Kabutops,Pokémon Carapace,"On pense que ce Pokémon est
+venu sur la terre ferme pour
+suivre l’évolution de ses proies."
+142,Ptéra,Pokémon Fossile,"Un Pokémon qui arpentait le ciel
+au temps des dinosaures. Ses
+crocs sont pareils à des scies."
+143,Ronflex,Pokémon Pionceur,"Une fois le ventre plein, il est trop
+amorphe pour lever le petit doigt.
+Sautez sur son ventre!"
+144,Artikodin,Pokémon Glaciaire,"Un Pokémon Oiseau légendaire.
+Il peut provoquer des blizzards
+en gelant l’humidité de l’air."
+145,Électhor,Pokémon Électrique,"Un Pokémon Oiseau légendaire dont
+on dit qu’il vit dans les nuages
+d’orage. Il contrôle la foudre."
+146,Sulfura,Pokémon Flamme,"L’un des Pokémon Oiseaux légendaires.
+On dit que sa venue annonce l’arrivée
+du printemps."
+147,Minidraco,Pokémon Dragon,"On l’appelle “Pokémon mirage”
+en raison de sa rareté. On a
+découvert sa mue."
+148,Draco,Pokémon Dragon,"La météo change brusquement quand
+il est entouré d’une aura. On dit
+qu’il peuple les mers et les lacs."
+149,Dracolosse,Pokémon Dragon,"On raconte qu’il vit quelque part
+en mer. Il guide les équipages
+naufragés jusqu’à la terre ferme."
+150,Mewtwo,Pokémon Génétique,"Un Pokémon conçu en réorganisant
+les gènes de Mew. On raconte qu’il
+s’agit du Pokémon le plus féroce."
+151,Mew,Pokémon Nouveau,"Nombre de scientifiques voient en
+lui l’ancêtre des Pokémon car il
+maîtrise toutes leurs capacités."

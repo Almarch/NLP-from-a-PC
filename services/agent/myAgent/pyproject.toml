@@ -8,5 +8,6 @@ dependencies = [
     "asyncio",
     "httpx",
     "python-multipart",
+    "requests",
 ]
 

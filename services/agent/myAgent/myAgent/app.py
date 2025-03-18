@@ -7,6 +7,8 @@ import os
 from datetime import datetime
 import uuid
 from typing import Dict, Any, Optional, Union
+from .__main__ import OLLAMA_URL, LOG_DIR
+from .Agent import Agent
 
 # Configure logging
 logging.basicConfig(
@@ -21,10 +23,6 @@ logger = logging.getLogger("ollama-agent")
 
 # Initialize FastAPI application
 app = FastAPI(title="Ollama Agent Proxy")
-
-# Configuration
-OLLAMA_URL = "http://ollama:11434"
-LOG_DIR = "/logs"
 
 # Ensure log directory exists
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -123,42 +121,41 @@ async def proxy_endpoint(request: Request, path: str):
     # Get request headers and body
     headers = dict(request.headers)
     body = await request.body()
-    
-    # Log the incoming request
-    await log_transaction(
-        request_id=request_id,
-        direction="request",
-        method=method,
-        path=path,
-        headers=headers,
-        body=body
-    )
-    
+
     # Determine if this is a streaming endpoint
     is_streaming = False
     if path.startswith("api/"):
         endpoint = path.split("/")[-1]
-        is_streaming = endpoint in ["generate", "chat"]
+        if endpoint in ["generate", "chat"]:
+            body_text = body.decode("utf-8")
+            body_json = json.loads(body_text)
+            is_streaming = body_json.get("stream", False)
     
     try:
         if is_streaming:
+
+            # Log the incoming request
+            await log_transaction(
+                request_id=request_id,
+                direction="request",
+                method=method,
+                path=path,
+                headers=headers,
+                body=body
+            )
+
+            agent = Agent(body_json)
+            new_body_dict = agent.process()
+            new_body_json = json.dumps(new_body_dict)
+            new_body = new_body_json.encode("utf-8")
+
             # Handle streaming response
             ollama_response = await http_client.request(
                 method=method,
                 url=url,
                 headers=headers,
-                content=body,
+                content=new_body,
                 params=request.query_params
-            )
-            
-            # Log initial response headers
-            await log_transaction(
-                request_id=request_id,
-                direction="response_headers",
-                method=method,
-                path=path,
-                headers=dict(ollama_response.headers),
-                status_code=ollama_response.status_code
             )
             
             # Stream and log response chunks
@@ -192,7 +189,7 @@ async def proxy_endpoint(request: Request, path: str):
                 # Log the complete streamed response
                 await log_transaction(
                     request_id=request_id,
-                    direction="response_complete",
+                    direction="response",
                     method=method,
                     path=path,
                     headers=dict(ollama_response.headers),
@@ -209,24 +206,21 @@ async def proxy_endpoint(request: Request, path: str):
                 headers=dict(ollama_response.headers)
             )
         else:
-            # Handle regular (non-streaming) response
+            '''
+            Handle regular (non-streaming) response'
+            This includes :
+            - Calls not to api/chat or api/generate
+            - Chat tasks like:
+                - Generate a concise, 3-5 word title with an emoji summarizing the chat history.
+                - You are an autocompletion system.
+            '''
+
             ollama_response = await http_client.request(
                 method=method,
                 url=url,
                 headers=headers,
                 content=body,
                 params=request.query_params
-            )
-            
-            # Log the response
-            await log_transaction(
-                request_id=request_id,
-                direction="response",
-                method=method,
-                path=path,
-                headers=dict(ollama_response.headers),
-                body=ollama_response.content,
-                status_code=ollama_response.status_code
             )
             
             # Return the response to the client
