@@ -22,6 +22,12 @@ Generate SSL keys in order to secure all communications:
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout nlp-from-a-pc/services/nginx/ssl/ssl.key -out nlp-from-a-pc/services/nginx/ssl/ssl.crt -subj "/CN=localhost"
 ```
 
+Also, webUI requires a secret key:
+
+```sh
+echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | head -n 1)" > nlp-from-a-pc/.env
+```
+
 ## Deploy
 
 <img src="https://github.com/user-attachments/assets/b12cbef1-98a9-4b79-bca0-fa1f21cb6f0e" width="200px" align="right"/>
