@@ -8,10 +8,3 @@ matplotlib
 chromadb
 ipywidgets
 pdf2image
-ollama
-langchain
-langchain_community
-langchain_ollama
-langchain_experimental
-tiktoken
-transformers
