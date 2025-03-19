@@ -1,0 +1,263 @@
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import StreamingResponse
+import httpx
+import logging
+import json
+import os
+from datetime import datetime
+import uuid
+from typing import Dict, Any, Optional, Union
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("/logs/agent.log"),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger("ollama-agent")
+
+# Initialize FastAPI application
+app = FastAPI(title="Ollama Agent Proxy")
+
+# Configuration
+OLLAMA_URL = "http://ollama:11434"
+LOG_DIR = "/logs"
+
+# Ensure log directory exists
+os.makedirs(LOG_DIR, exist_ok=True)
+
+# Initialize HTTP client with infinite timeout for streaming responses
+http_client = httpx.AsyncClient(timeout=None)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await http_client.aclose()
+
+def generate_request_id() -> str:
+    """Generate a unique ID for tracking requests."""
+    return f"{datetime.now().strftime('%Y%m%d%H%M%S')}-{str(uuid.uuid4())[:8]}"
+
+async def log_transaction(
+    request_id: str, 
+    direction: str, 
+    method: str, 
+    path: str, 
+    headers: Dict[str, str], 
+    body: Optional[Union[Dict[str, Any], str, bytes]] = None,
+    status_code: Optional[int] = None
+) -> None:
+    """
+    Log transaction details to a JSON file.
+    
+    Args:
+        request_id: Unique identifier for the request
+        direction: 'request' or 'response'
+        method: HTTP method (GET, POST, etc.)
+        path: API endpoint path
+        headers: HTTP headers
+        body: Request or response body
+        status_code: HTTP status code (for responses only)
+    """
+    timestamp = datetime.now().isoformat()
+    
+    # Create log entry base
+    log_entry = {
+        "request_id": request_id,
+        "timestamp": timestamp,
+        "direction": direction,
+        "method": method,
+        "path": path,
+        "headers": {k: v for k, v in headers.items() if k.lower() not in ["authorization"]}
+    }
+    
+    # Add status code for responses
+    if status_code is not None:
+        log_entry["status_code"] = status_code
+    
+    # Process and add body if present
+    if body is not None:
+        if isinstance(body, (dict, list)):
+            log_entry["body"] = body
+        elif isinstance(body, bytes):
+            try:
+                decoded_body = body.decode("utf-8")
+                try:
+                    log_entry["body"] = json.loads(decoded_body)
+                except json.JSONDecodeError:
+                    log_entry["body"] = decoded_body if len(decoded_body) < 10000 else f"{decoded_body[:9000]}... [truncated]"
+            except UnicodeDecodeError:
+                log_entry["body"] = "[binary data]"
+        elif isinstance(body, str):
+            try:
+                log_entry["body"] = json.loads(body)
+            except json.JSONDecodeError:
+                log_entry["body"] = body if len(body) < 10000 else f"{body[:9000]}... [truncated]"
+    
+    # Create filename based on request_id and direction
+    filename = f"{request_id}_{direction}.json"
+    filepath = os.path.join(LOG_DIR, filename)
+    
+    # Write log to file
+    with open(filepath, "w") as f:
+        json.dump(log_entry, f, indent=2)
+    
+    # Log basic info to console
+    log_message = f"{direction.upper()} {request_id}: {method} {path}"
+    if status_code:
+        log_message += f" (Status: {status_code})"
+    logger.info(log_message)
+
+@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"])
+async def proxy_endpoint(request: Request, path: str):
+    """
+    Generic endpoint to proxy all requests to Ollama service.
+    Logs both the request and response data.
+    """
+    request_id = generate_request_id()
+    method = request.method
+    url = f"{OLLAMA_URL}/{path}"
+    
+    # Get request headers and body
+    headers = dict(request.headers)
+    body = await request.body()
+    
+    # Log the incoming request
+    await log_transaction(
+        request_id=request_id,
+        direction="request",
+        method=method,
+        path=path,
+        headers=headers,
+        body=body
+    )
+    
+    # Determine if this is a streaming endpoint
+    is_streaming = False
+    if path.startswith("api/"):
+        endpoint = path.split("/")[-1]
+        is_streaming = endpoint in ["generate", "chat"]
+    
+    try:
+        if is_streaming:
+            # Handle streaming response
+            ollama_response = await http_client.request(
+                method=method,
+                url=url,
+                headers=headers,
+                content=body,
+                params=request.query_params
+            )
+            
+            # Log initial response headers
+            await log_transaction(
+                request_id=request_id,
+                direction="response_headers",
+                method=method,
+                path=path,
+                headers=dict(ollama_response.headers),
+                status_code=ollama_response.status_code
+            )
+            
+            # Stream and log response chunks
+            async def stream_with_logging():
+                full_response = bytearray()
+                chunk_count = 0
+                
+                async for chunk in ollama_response.aiter_bytes():
+                    full_response.extend(chunk)
+                    chunk_count += 1
+                    
+                    # Periodically log chunk data (avoid excessive logging)
+                    if chunk_count % 10 == 0:
+                        logger.debug(f"Streaming chunk {chunk_count} for {request_id}")
+                    
+                    # Forward chunk to client
+                    yield chunk
+                
+                # Log complete response after streaming finishes
+                try:
+                    # Try to decode and parse as JSON
+                    complete_response = full_response.decode("utf-8")
+                    response_data = json.loads(complete_response)
+                except:
+                    # Fall back to raw string if not valid JSON
+                    try:
+                        response_data = full_response.decode("utf-8")
+                    except:
+                        response_data = "[binary data]"
+                
+                # Log the complete streamed response
+                await log_transaction(
+                    request_id=request_id,
+                    direction="response_complete",
+                    method=method,
+                    path=path,
+                    headers=dict(ollama_response.headers),
+                    body=response_data,
+                    status_code=ollama_response.status_code
+                )
+                
+                logger.info(f"Completed streaming response for {request_id} ({chunk_count} chunks)")
+            
+            # Return streaming response
+            return StreamingResponse(
+                stream_with_logging(),
+                status_code=ollama_response.status_code,
+                headers=dict(ollama_response.headers)
+            )
+        else:
+            # Handle regular (non-streaming) response
+            ollama_response = await http_client.request(
+                method=method,
+                url=url,
+                headers=headers,
+                content=body,
+                params=request.query_params
+            )
+            
+            # Log the response
+            await log_transaction(
+                request_id=request_id,
+                direction="response",
+                method=method,
+                path=path,
+                headers=dict(ollama_response.headers),
+                body=ollama_response.content,
+                status_code=ollama_response.status_code
+            )
+            
+            # Return the response to the client
+            return Response(
+                content=ollama_response.content,
+                status_code=ollama_response.status_code,
+                headers=dict(ollama_response.headers)
+            )
+    
+    except Exception as e:
+        # Log any errors that occur
+        error_details = {
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+        
+        await log_transaction(
+            request_id=request_id,
+            direction="error",
+            method=method,
+            path=path,
+            headers={},
+            body=error_details,
+            status_code=500
+        )
+        
+        logger.error(f"Error processing request {request_id}: {str(e)}")
+        
+        # Return error response
+        return Response(
+            content=json.dumps({"error": str(e)}),
+            status_code=500,
+            media_type="application/json"
+        )

@@ -24,13 +24,24 @@ services:
     networks:
       - internal_network
 
+  agent:
+    build: ./services/agent/
+    restart: always
+    volumes:
+      - ./services/agent/logs:/logs/
+    depends_on:
+      - chroma
+      - ollama
+    networks:
+      - internal_network
+
   webui:
     image: ghcr.io/open-webui/open-webui:main
     restart: always
     depends_on:
-      - ollama
+      - agent
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_BASE_URL=http://agent:80
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
     volumes:
       - ./services/webui:/app/backend/data
