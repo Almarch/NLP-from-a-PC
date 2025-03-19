@@ -137,7 +137,7 @@ async def proxy_endpoint(request: Request, path: str):
             # Log the incoming request
             await log_transaction(
                 request_id=request_id,
-                direction="request",
+                direction="request_raw",
                 method=method,
                 path=path,
                 headers=headers,
@@ -148,6 +148,16 @@ async def proxy_endpoint(request: Request, path: str):
             new_body_dict = agent.process()
             new_body_json = json.dumps(new_body_dict)
             new_body = new_body_json.encode("utf-8")
+
+            # Log the processed request
+            await log_transaction(
+                request_id=request_id,
+                direction="request_processed",
+                method=method,
+                path=path,
+                headers=headers,
+                body=new_body
+            )
 
             # Handle streaming response
             ollama_response = await http_client.request(
