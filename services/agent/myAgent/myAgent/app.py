@@ -159,62 +159,29 @@ async def proxy_endpoint(request: Request, path: str):
                 body=new_body
             )
 
-            # Handle streaming response
-            ollama_response = await http_client.request(
-                method=method,
-                url=url,
-                headers=headers,
-                content=new_body,
-                params=request.query_params
-            )
-            
-            # Stream and log response chunks
-            async def stream_with_logging():
-                full_response = bytearray()
-                chunk_count = 0
-                
-                async for chunk in ollama_response.aiter_bytes():
-                    full_response.extend(chunk)
-                    chunk_count += 1
-                    
-                    # Periodically log chunk data (avoid excessive logging)
-                    if chunk_count % 10 == 0:
-                        logger.debug(f"Streaming chunk {chunk_count} for {request_id}")
-                    
-                    # Forward chunk to client
-                    yield chunk
-                
-                # Log complete response after streaming finishes
-                try:
-                    # Try to decode and parse as JSON
-                    complete_response = full_response.decode("utf-8")
-                    response_data = json.loads(complete_response)
-                except:
-                    # Fall back to raw string if not valid JSON
-                    try:
-                        response_data = full_response.decode("utf-8")
-                    except:
-                        response_data = "[binary data]"
-                
-                # Log the complete streamed response
-                await log_transaction(
-                    request_id=request_id,
-                    direction="response",
+            # Utilisation de http_client.stream pour traiter la réponse en streaming
+            async def stream_response():
+                async with http_client.stream(
                     method=method,
-                    path=path,
-                    headers=dict(ollama_response.headers),
-                    body=response_data,
-                    status_code=ollama_response.status_code
-                )
-                
-                logger.info(f"Completed streaming response for {request_id} ({chunk_count} chunks)")
-            
-            # Return streaming response
+                    url=url,
+                    headers=headers,
+                    content=body,
+                    params=request.query_params
+                ) as ollama_response:
+                    async for chunk in ollama_response.aiter_bytes():
+                        logger.info(f"Forwarding chunk: {len(chunk)} bytes")
+                        yield chunk
+
             return StreamingResponse(
-                stream_with_logging(),
-                status_code=ollama_response.status_code,
-                headers=dict(ollama_response.headers)
-            )
+                stream_response(),
+                media_type="text/event-stream",
+                headers={
+                    "Content-Type": "text/event-stream",
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive"
+                }
+            ) 
+        
         else:
             '''
             Handle regular (non-streaming) response'
@@ -257,7 +224,7 @@ async def proxy_endpoint(request: Request, path: str):
             status_code=500
         )
         
-        logger.error(f"Error processing request {request_id}: {str(e)}")
+        logger.info(f"Error processing request {request_id}: {str(e)}")
         
         # Return error response
         return Response(
