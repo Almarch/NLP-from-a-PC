@@ -161,16 +161,37 @@ async def proxy_endpoint(request: Request, path: str):
 
             # Utilisation de http_client.stream pour traiter la réponse en streaming
             async def stream_response():
+                collected_chunks = []
+                
                 async with http_client.stream(
                     method=method,
                     url=url,
                     headers=headers,
-                    content=body,
+                    content=new_body,
                     params=request.query_params
                 ) as ollama_response:
+                    # Capture response status and headers for logging
+                    response_status = ollama_response.status_code
+                    response_headers = dict(ollama_response.headers)
+                    
                     async for chunk in ollama_response.aiter_bytes():
-                        logger.info(f"Forwarding chunk: {len(chunk)} bytes")
+                        collected_chunks.append(chunk)
                         yield chunk
+                
+                # Stream completed - log the complete response
+                complete_response = b''.join(collected_chunks)
+                complete_text = complete_response.decode('utf-8', errors='replace')
+                
+                # Log the complete response as raw text
+                await log_transaction(
+                    request_id=request_id,
+                    direction="response_complete",
+                    method=method,
+                    path=path,
+                    headers=response_headers,
+                    body={"raw_text": complete_text[:10000] if len(complete_text) > 10000 else complete_text},
+                    status_code=response_status
+                )
 
             return StreamingResponse(
                 stream_response(),
@@ -180,7 +201,7 @@ async def proxy_endpoint(request: Request, path: str):
                     "Cache-Control": "no-cache",
                     "Connection": "keep-alive"
                 }
-            ) 
+            )
         
         else:
             '''
