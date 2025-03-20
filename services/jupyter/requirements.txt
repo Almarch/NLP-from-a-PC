@@ -5,6 +5,6 @@ pandas
 numpy
 scikit-learn
 matplotlib
-chromadb
 ipywidgets
 pdf2image
+qdrant_client

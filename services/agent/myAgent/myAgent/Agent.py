@@ -1,5 +1,6 @@
+from .__main__ import QDRANT_HOST, QDRANT_PORT, ENCODER, OLLAMA_URL
+from qdrant_client import QdrantClient
 import requests
-from .__main__ import CHROMA_HOST, CHROMA_PORT, ENCODER, OLLAMA_URL
 
 class Agent():
     def __init__(self, body):

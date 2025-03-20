@@ -14,13 +14,12 @@ services:
     networks:
       - internal_network
 
-  chroma:
-    image: chromadb/chroma:latest
-    restart: always
+  qdrant:
+    image: qdrant/qdrant:latest
     volumes:
-      - ./services/chroma:/chroma/chroma
+      - ./services/qdrant:/qdrant/storage
     environment:
-      - IS_PERSISTENT=TRUE
+      - QDRANT_ALLOW_CORS=true
     networks:
       - internal_network
 
@@ -30,7 +29,7 @@ services:
     volumes:
       - ./services/agent/logs:/logs/
     depends_on:
-      - chroma
+      - qdrant
       - ollama
     networks:
       - internal_network
@@ -55,7 +54,7 @@ services:
       - ./services/jupyter/notebook:/project
     depends_on:
       - ollama
-      - chroma
+      - qdrant
     networks:
       - internal_network
 
@@ -67,7 +66,7 @@ services:
       - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 8080:8080
-      - 8888:8888  
+      - 8888:8888
     depends_on:
       - webui
     networks:

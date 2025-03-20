@@ -4,8 +4,8 @@ import sys
 # Configuration
 OLLAMA_URL = "http://ollama:11434"
 LOG_DIR = "/logs"
-CHROMA_HOST = "chroma"
-CHROMA_PORT = 8000
+QDRANT_HOST = "qdrant"
+QDRANT_PORT = 6333
 ENCODER = "snowflake-arctic-embed2:568m-l-fp16"
 
 def main():
