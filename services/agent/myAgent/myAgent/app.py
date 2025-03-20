@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 import uuid
 from typing import Dict, Any, Optional, Union
-from .__main__ import OLLAMA_URL, LOG_DIR
+from .__main__ import OLLAMA, LOG_DIR
 from .Agent import Agent
 
 # Configure logging
@@ -116,7 +116,7 @@ async def proxy_endpoint(request: Request, path: str):
     """
     request_id = generate_request_id()
     method = request.method
-    url = f"{OLLAMA_URL}/{path}"
+    url = f"{OLLAMA}/{path}"
     
     # Get request headers and body
     headers = dict(request.headers)
