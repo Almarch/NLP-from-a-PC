@@ -4,8 +4,8 @@ The goal of this repo is to play with natural language processing with relativel
 
 - a linux/amd64 platform ;
 - git and docker ;
-- a Nvidia GPU with cuda ;
-- at least 32 Go RAM.
+- at least 32 Go RAM ;
+- a Nvidia GPU with cuda.
 
 To make use of the later, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
@@ -50,8 +50,8 @@ docker ps
 ## Pull the models
 
 [Ollama](https://github.com/ollama/ollama) is included in the stack. It requires 2 models:
-- a LLM
-- an encoder
+- a LLM. By default, [Mistral-Nemo](https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407) is selected.
+- an encoder. By default, [BGE-M3](https://huggingface.co/BAAI/bge-m3) is selected.
 
 If you change the models, adjust `services/myAgent/myAgent/__main__.py` accordingly.
 
