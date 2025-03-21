@@ -67,20 +67,24 @@ ollama pull bge-m3:567m-fp16
 
 A Qdrant vector DB is included in the stack.
 
-It must be filled as detailed in the `services/jupyter/notebook/pokemons.py`.
+It must be filled using the Jupyter Notebook service, accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
 
-The notebook is also accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
+## Access the WebUI
+
+Open-WebUI is included in the stack.
+
+Reach https://localhost:8080 and parameterize the interface. Deactivate the encoder model, and make the LLM accessible to all users. If needed, make accounts to the family & friend you would like to share the app with.
 
 ## Tunneling
 
 <img src="https://github.com/user-attachments/assets/86197798-9039-484b-9874-85f529fba932" width="100px" align="right"/>
 
-It is sometimes easier to take a virtual private server (VPS) than obtaining a fixed IP from the Internet provider. We want some services from the GPU server, let's call it A, to be accessible from anywhere, including from machine C. In the middle, B is the VPS used as a tunnel. 
+Say we need to tunnel the server using a VPS. In other terms, we want some services from the GPU server, let's call it A, to be accessible from anywhere, including from machine C. In the middle, B is the VPS used as a tunnel. 
 
 Name|A  |B  |C  |
 ---|---|---|---
 Description|GPU server  |VPS  |Client  |
-Role|Host the models  |Host the tunnel  |Plays with NLP  | 
+Role|Host the services  |Host the tunnel  |Use the Pokédex  | 
 User|userA  |userB  | doesn't matter   | 
 IP|doesn't matter  |11.22.33.44  | doesn't matter  | 
 
