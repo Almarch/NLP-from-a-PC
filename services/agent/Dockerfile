@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:latest
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir build

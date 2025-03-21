@@ -7,6 +7,8 @@ import os
 from datetime import datetime
 import uuid
 from typing import Dict, Any, Optional, Union
+from .__main__ import OLLAMA, LOG_DIR
+from .MyAgent import MyAgent
 
 # Configure logging
 logging.basicConfig(
@@ -21,10 +23,6 @@ logger = logging.getLogger("ollama-agent")
 
 # Initialize FastAPI application
 app = FastAPI(title="Ollama Agent Proxy")
-
-# Configuration
-OLLAMA_URL = "http://ollama:11434"
-LOG_DIR = "/logs"
 
 # Ensure log directory exists
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -118,115 +116,114 @@ async def proxy_endpoint(request: Request, path: str):
     """
     request_id = generate_request_id()
     method = request.method
-    url = f"{OLLAMA_URL}/{path}"
+    url = f"{OLLAMA}/{path}"
     
     # Get request headers and body
     headers = dict(request.headers)
     body = await request.body()
-    
-    # Log the incoming request
-    await log_transaction(
-        request_id=request_id,
-        direction="request",
-        method=method,
-        path=path,
-        headers=headers,
-        body=body
-    )
-    
+
     # Determine if this is a streaming endpoint
     is_streaming = False
     if path.startswith("api/"):
         endpoint = path.split("/")[-1]
-        is_streaming = endpoint in ["generate", "chat"]
+        if endpoint in ["generate", "chat"]:
+            body_str = body.decode("utf-8")
+            body_dict = json.loads(body_str)
+            is_streaming = body_dict.get("stream", False)
     
     try:
         if is_streaming:
-            # Handle streaming response
-            ollama_response = await http_client.request(
-                method=method,
-                url=url,
-                headers=headers,
-                content=body,
-                params=request.query_params
-            )
-            
-            # Log initial response headers
+
+            # Log the incoming request
             await log_transaction(
                 request_id=request_id,
-                direction="response_headers",
+                direction="request_raw",
                 method=method,
                 path=path,
-                headers=dict(ollama_response.headers),
-                status_code=ollama_response.status_code
+                headers=headers,
+                body=body
             )
-            
-            # Stream and log response chunks
-            async def stream_with_logging():
-                full_response = bytearray()
-                chunk_count = 0
+
+            agent = MyAgent(body_dict)
+            new_body_dict = agent.process()
+            new_body_str = json.dumps(new_body_dict)
+            new_body = new_body_str.encode("utf-8")
+
+            headers = {
+                "content-type": "application/json",
+                "accept": "*/*"
+            }
+
+            # Log the processed request
+            await log_transaction(
+                request_id=request_id,
+                direction="request_processed",
+                method=method,
+                path=path,
+                headers=headers,
+                body=new_body
+            )
+
+            # Utilisation de http_client.stream pour traiter la réponse en streaming
+            async def stream_response():
+                collected_chunks = []
                 
-                async for chunk in ollama_response.aiter_bytes():
-                    full_response.extend(chunk)
-                    chunk_count += 1
+                async with http_client.stream(
+                    method=method,
+                    url=url,
+                    headers=headers,
+                    content=new_body,
+                    params=request.query_params
+                ) as ollama_response:
+                    # Capture response status and headers for logging
+                    response_status = ollama_response.status_code
+                    response_headers = dict(ollama_response.headers)
                     
-                    # Periodically log chunk data (avoid excessive logging)
-                    if chunk_count % 10 == 0:
-                        logger.debug(f"Streaming chunk {chunk_count} for {request_id}")
-                    
-                    # Forward chunk to client
-                    yield chunk
+                    async for chunk in ollama_response.aiter_bytes():
+                        collected_chunks.append(chunk)
+                        yield chunk
                 
-                # Log complete response after streaming finishes
-                try:
-                    # Try to decode and parse as JSON
-                    complete_response = full_response.decode("utf-8")
-                    response_data = json.loads(complete_response)
-                except:
-                    # Fall back to raw string if not valid JSON
-                    try:
-                        response_data = full_response.decode("utf-8")
-                    except:
-                        response_data = "[binary data]"
+                # Stream completed - log the complete response
+                complete_response = b''.join(collected_chunks)
+                complete_text = complete_response.decode('utf-8', errors='replace')
                 
-                # Log the complete streamed response
+                # Log the complete response as raw text
                 await log_transaction(
                     request_id=request_id,
                     direction="response_complete",
                     method=method,
                     path=path,
-                    headers=dict(ollama_response.headers),
-                    body=response_data,
-                    status_code=ollama_response.status_code
+                    headers=response_headers,
+                    body={"raw_text": complete_text[:10000] if len(complete_text) > 10000 else complete_text},
+                    status_code=response_status
                 )
-                
-                logger.info(f"Completed streaming response for {request_id} ({chunk_count} chunks)")
-            
-            # Return streaming response
+
             return StreamingResponse(
-                stream_with_logging(),
-                status_code=ollama_response.status_code,
-                headers=dict(ollama_response.headers)
+                stream_response(),
+                media_type="text/event-stream",
+                headers={
+                    "Content-Type": "text/event-stream",
+                    "Cache-Control": "no-cache",
+                    "Connection": "keep-alive"
+                }
             )
+        
         else:
-            # Handle regular (non-streaming) response
+            '''
+            Handle regular (non-streaming) response'
+            This includes :
+            - Calls not to api/chat or api/generate
+            - Chat tasks like:
+                - Generate a concise, 3-5 word title with an emoji summarizing the chat history.
+                - You are an autocompletion system.
+            '''
+
             ollama_response = await http_client.request(
                 method=method,
                 url=url,
                 headers=headers,
                 content=body,
                 params=request.query_params
-            )
-            
-            # Log the response
-            await log_transaction(
-                request_id=request_id,
-                direction="response",
-                method=method,
-                path=path,
-                headers=dict(ollama_response.headers),
-                body=ollama_response.content,
-                status_code=ollama_response.status_code
             )
             
             # Return the response to the client
@@ -253,7 +250,7 @@ async def proxy_endpoint(request: Request, path: str):
             status_code=500
         )
         
-        logger.error(f"Error processing request {request_id}: {str(e)}")
+        logger.info(f"Error processing request {request_id}: {str(e)}")
         
         # Return error response
         return Response(

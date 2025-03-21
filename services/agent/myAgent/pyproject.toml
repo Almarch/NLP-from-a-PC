@@ -8,5 +8,7 @@ dependencies = [
     "asyncio",
     "httpx",
     "python-multipart",
+    "requests",
+    "qdrant_client",
 ]
 
