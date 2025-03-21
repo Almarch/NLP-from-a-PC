@@ -41,19 +41,21 @@ echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | he
 The project is containerized with docker. However, some preliminary steps are required in order to prepare the LLM on the host machine.
 
 ```sh
+docker compose pull
 docker compose build
 docker compose up -d
 docker ps
 ```
 
-Pull all required models. The required models are:
+## Pull the models
 
+Ollama is included in the stack. It requires 2 models:
 - a LLM
 - an encoder
 
 If you change the models, adjust `services/myAgent/myAgent/__main__.py` accordingly.
 
-If Ollama runs on container `123`:
+Pull the models from the Ollama container. If Ollama runs on container `123`:
 
 ```sh
 docker exec -it 123 bash
@@ -63,7 +65,11 @@ ollama pull bge-m3:567m-fp16
 
 ## Fill the Vector DB
 
-A Qdrant vector DB is included in the stack. It has been filled as detailed in the `services/jupyter/notebook/pokemons.py`, also accessible from https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
+A Qdrant vector DB is included in the stack.
+
+It must be filled as detailed in the `services/jupyter/notebook/pokemons.py`.
+
+The notebook is also accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
 
 ## Tunneling
 
