@@ -3,8 +3,9 @@
 The goal of this repo is to play with natural language processing with relatively limited resources. The specs it has been built with are:
 
 - a linux/amd64 platform ;
-- with git, docker and python3 ;
-- a Nvidia GPU with cuda.
+- git and docker ;
+- a Nvidia GPU with cuda ;
+- at least 32 Go RAM.
 
 To make use of the later, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
@@ -43,9 +44,9 @@ Pull all required models. The required models are:
 - a LLM
 - an encoder
 
-If you change the model, adjust `services/myAgent/myAgent/__main__.py` accordingly.
+If you change the models, adjust `services/myAgent/myAgent/__main__.py` accordingly.
 
-If ollama runs on container `123`:
+If Ollama runs on container `123`:
 
 ```sh
 docker exec -it 123 bash
@@ -61,11 +62,11 @@ A Qdrant vector DB is included in the stack. It has been filled as detailed in t
 
 <img src="https://github.com/user-attachments/assets/86197798-9039-484b-9874-85f529fba932" width="100px" align="right"/>
 
-It is sometimes easier to take a virtual private server (VPS) than obtaining a fixed IP from the Internet provider. We want some services from the gaming machine, let's call it A, to be accessible from anywhere, including from machine C. In the middle, B is the VPS used as a tunnel. 
+It is sometimes easier to take a virtual private server (VPS) than obtaining a fixed IP from the Internet provider. We want some services from the GPU server, let's call it A, to be accessible from anywhere, including from machine C. In the middle, B is the VPS used as a tunnel. 
 
 Name|A  |B  |C  |
 ---|---|---|---
-Description|Gaming machine  |VPS  |Client  |
+Description|GPU server  |VPS  |Client  |
 Role|Host the models  |Host the tunnel  |Plays with NLP  | 
 User|userA  |userB  | doesn't matter   | 
 IP|doesn't matter  |11.22.33.44  | doesn't matter  | 
