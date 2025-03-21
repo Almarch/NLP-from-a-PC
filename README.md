@@ -38,7 +38,7 @@ echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | he
 
 ## Deploy
 
-The project is containerized with [docker](https://github.com/docker). However, some preliminary steps are required in order to prepare the LLM on the host machine.
+The project is containerized with [docker](https://github.com/docker). Pull, build & launch all services with compose :
 
 ```sh
 docker compose pull
