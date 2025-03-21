@@ -8,7 +8,7 @@ from datetime import datetime
 import uuid
 from typing import Dict, Any, Optional, Union
 from .__main__ import OLLAMA, LOG_DIR
-from .Agent import Agent
+from .MyAgent import MyAgent
 
 # Configure logging
 logging.basicConfig(
@@ -127,9 +127,9 @@ async def proxy_endpoint(request: Request, path: str):
     if path.startswith("api/"):
         endpoint = path.split("/")[-1]
         if endpoint in ["generate", "chat"]:
-            body_text = body.decode("utf-8")
-            body_json = json.loads(body_text)
-            is_streaming = body_json.get("stream", False)
+            body_str = body.decode("utf-8")
+            body_dict = json.loads(body_str)
+            is_streaming = body_dict.get("stream", False)
     
     try:
         if is_streaming:
@@ -144,10 +144,15 @@ async def proxy_endpoint(request: Request, path: str):
                 body=body
             )
 
-            agent = Agent(body_json)
+            agent = MyAgent(body_dict)
             new_body_dict = agent.process()
-            new_body_json = json.dumps(new_body_dict)
-            new_body = new_body_json.encode("utf-8")
+            new_body_str = json.dumps(new_body_dict)
+            new_body = new_body_str.encode("utf-8")
+
+            headers = {
+                "content-type": "application/json",
+                "accept": "*/*"
+            }
 
             # Log the processed request
             await log_transaction(

@@ -4,18 +4,23 @@ import requests
 
 class Agent():
     def __init__(self, body):
-        self.input = body
+        self.body = body
+        self.last_message = body["messages"][-1]["content"]
         self.client = QdrantClient(QDRANT_HOST, port=QDRANT_PORT)
 
-    def process(self):
-        return self.input
-    
+    def set_instructions(self, instructions):
+        system_message = {
+            "role": "system",
+            "content": instructions
+        }
+        self.body["messages"].insert(0, system_message)
+
     def embed(
         self,
         prompt,
     ):
         response = requests.post(
-            OLLAMA + "/embeddings",
+            OLLAMA + "/api/embeddings",
             json = {
                 "model": ENCODER,
                 "prompt": prompt,
@@ -23,13 +28,13 @@ class Agent():
         )
         return response.json()["embedding"]
     
-    def generate_text(
+    def generate(
         self,
         prompt,
         temperature = 0,
     ):
         response = requests.post(
-            OLLAMA + "/generate",
+            OLLAMA + "/api/generate",
             json = {
                 "model": LLM,
                 "prompt": prompt,
@@ -38,3 +43,4 @@ class Agent():
             }
         )
         return(response.json()["response"])
+    
