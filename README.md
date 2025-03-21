@@ -38,7 +38,7 @@ echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | he
 
 ## Deploy
 
-The project is containerized with docker. However, some preliminary steps are required in order to prepare the LLM on the host machine.
+The project is containerized with [docker](https://github.com/docker). However, some preliminary steps are required in order to prepare the LLM on the host machine.
 
 ```sh
 docker compose pull
@@ -49,7 +49,7 @@ docker ps
 
 ## Pull the models
 
-Ollama is included in the stack. It requires 2 models:
+[Ollama](https://github.com/ollama/ollama) is included in the stack. It requires 2 models:
 - a LLM
 - an encoder
 
@@ -65,13 +65,13 @@ ollama pull bge-m3:567m-fp16
 
 ## Fill the Vector DB
 
-A Qdrant vector DB is included in the stack.
+A [Qdrant](https://github.com/qdrant/qdrant) vector DB is included in the stack.
 
-It must be filled using the Jupyter Notebook service, accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
+It must be filled using the [Jupyter Notebook](https://github.com/jupyter/notebook) service, accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
 
 ## Access the WebUI
 
-Open-WebUI is included in the stack.
+[Open-WebUI](https://github.com/open-webui/open-webui) is included in the stack.
 
 Reach https://localhost:8080 and parameterize the interface. Deactivate the encoder model, and make the LLM accessible to all users. If needed, make accounts to the family & friend you would like to share the app with.
 
