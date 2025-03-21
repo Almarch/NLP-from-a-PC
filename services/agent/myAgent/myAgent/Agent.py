@@ -1,11 +1,10 @@
-from .__main__ import QDRANT_HOST, QDRANT_PORT, ENCODER, OLLAMA, LLM
+from .__main__ import QDRANT_HOST, QDRANT_PORT, ENCODER, OLLAMA, LLM, ENCODER_WINDOW
 from qdrant_client import QdrantClient
 import requests
 
 class Agent():
     def __init__(self, body):
         self.body = body
-        self.last_message = body["messages"][-1]["content"]
         self.client = QdrantClient(QDRANT_HOST, port=QDRANT_PORT)
 
     def set_instructions(self, instructions):
@@ -43,4 +42,34 @@ class Agent():
             }
         )
         return(response.json()["response"])
+    
+    def summarize(
+            self,
+            conversation,
+            nmax = ENCODER_WINDOW,
+    ):
+        prompt = f"""
+### INSTRUCTIONS
+
+You are an assistant specialized in summarizing conversations.
+You receive a conversation as input, and summarizing it with
+respects to its original language.
+
+The summary must makes a special emphasize on the last message.
+The goal of the rest of the conversation is to add as much
+context as needed to well interpret the last message.
+
+The summary must be at maximum {ENCODER_WINDOW} tokens long.
+
+### CONVERSATION
+
+{conversation}
+
+### SUMMARY
+
+        """
+
+        return self.generate(prompt)
+
+
     

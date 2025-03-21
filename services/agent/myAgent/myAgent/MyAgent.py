@@ -8,13 +8,16 @@ class MyAgent(Agent):
 
     def process(self):
 
-        pokemon_related, pokemon_mentionned = self.is_about_pokemon(self.last_message)
+        pokemon_related, _ = self.is_about_pokemon(self.body["messages"])
 
         if pokemon_related:
 
+            query = self.summarize(self.body["messages"])
+            query = self.embed(query)
+
             rag = self.client.query_points(
                 collection_name="pokemons",
-                query = self.embed(self.last_message),
+                query = query,
                 limit=5
             )
             rag = str([rag.points[i].payload for i in range(len(rag.points))])
@@ -28,19 +31,24 @@ class MyAgent(Agent):
 
     def is_about_pokemon(
         self,
-        text,
+        conversation,
     ):
         prompt = f"""
 ### INSTRUCTIONS
 
 You are an assistant specialized in detecting
-Pokémon topics. You receive an input text.
+Pokémon topics. You receive a conversation as input.
+You must decide if the latest message from the user
+is about Pokémons, especially with regards to the
+rest of the conversation.
+
 If the input text is likely about Pokémons, you
 detect it and return the result in a json.
 
 Also, if you identify that some pokemons have
-been namely quoted, you mention them in the json
-as a list.
+been namely quoted in the whole conversation, you mention
+them in the json as a list. If you have a doubt about
+a potential Pokémon name, add it to the list.
 
 ```json
 {{{{
@@ -51,9 +59,10 @@ as a list.
 }}}}
 ```
 
-if the topic is likely not about Pokémons,
-or if you are note sure, also return the
-result in a json:
+if the conversation is not about Pokémons, or if
+the user changed the topic and stopped talking about Pokémons
+in their last message, or if you are note sure, 
+then also return the result in a json:
 
 ```json
 {{{{
@@ -69,7 +78,7 @@ Never add notes or comments.
 
 ### INPUT
 
-{text}
+{conversation}
 
 ### OUTPUT (remember to include the ```json)
 
@@ -120,7 +129,7 @@ You have are involved in a conversation with a user, and you must
 adress the latest message.
 
 However, you have received an input question which is not related to
-Pokémons. Explain the user you can't help them for this reasons.
+Pokémons. Explain the user you can't help them for this reason.
 
 """
         return prompt
