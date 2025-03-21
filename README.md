@@ -1,4 +1,4 @@
-# Pokédex: a local LLM with RAG & UI
+# <img src="https://github.com/user-attachments/assets/bfe58e17-99f6-4ad7-af1a-ce25b21cbc6a" alt="PoKéDeX" width="50"/> Pokédex: a local LLM with RAG & UI
 
 The goal of this repo is to play with natural language processing with relatively limited resources. The specs it has been built with are:
 
@@ -32,7 +32,7 @@ The project is containerized with docker. However, some preliminary steps are re
 
 ```sh
 git clone https://github.com/almarch/pokedex
-cd NLP-from-a-PC
+cd pokedex
 docker compose build
 docker compose up -d
 docker ps
