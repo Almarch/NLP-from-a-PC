@@ -8,9 +8,9 @@ The goal of this repo is to play with natural language processing with relativel
 
 To make use of the later, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
-It may work with different specs though but make sure the amount of VRAM + RAM available is soundly higher than the size of the model you intend to use. 
+It may work with different specs though but make sure the amount of VRAM + RAM available is higher than the size of the model you intend to use. 
 
-The cluster encompasses a [Open-WebUI](https://github.com/open-webui/open-webui) + [Ollama](https://github.com/ollama/ollama) stack, as well as a [Jupyter Notebook](https://github.com/jupyter/notebook) for experimentation.
+![image](https://github.com/user-attachments/assets/807d20ed-1906-40a4-9bcb-11514528cc89)
 
 ## Secure
 
