@@ -61,7 +61,7 @@ a potential Pokémon name, add it to the list.
 
 if the conversation is not about Pokémons, or if
 the user changed the topic and stopped talking about Pokémons
-in their last message, or if you are note sure, 
+in their last message, or if you are not sure, 
 then also return the result in a json:
 
 ```json
