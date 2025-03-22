@@ -24,13 +24,17 @@ cd pokedex
 
 ## Secure
 
-Generate SSL keys in order to secure all communications:
+The project uses [nginx](https://github.com/nginx/nginx) as a reverse proxy.
+
+Server-client transactions are encrypted using SSL keys. For more security, use a domain name and a CA certificate.
+
+Generate the SSL keys:
 
 ```sh
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout services/nginx/ssl/ssl.key -out services/nginx/ssl/ssl.crt -subj "/CN=localhost"
 ```
 
-Also, webUI requires a secret key:
+Also, the UI service requires a secret key:
 
 ```sh
 echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | head -n 1)" > .env
@@ -38,7 +42,7 @@ echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | he
 
 ## Deploy
 
-The project is containerized with [docker](https://github.com/docker). However, some preliminary steps are required in order to prepare the LLM on the host machine.
+The project is containerized with [docker](https://github.com/docker). Pull, build & launch all services with compose :
 
 ```sh
 docker compose pull
@@ -74,6 +78,13 @@ It must be filled using the [Jupyter Notebook](https://github.com/jupyter/notebo
 [Open-WebUI](https://github.com/open-webui/open-webui) is included in the stack.
 
 Reach https://localhost:8080 and parameterize the interface. Deactivate the encoder model, and make the LLM accessible to all users. If needed, make accounts to the family & friend you would like to share the app with.
+
+## Adaptation to other projects
+
+This framework can readily adapt to other agentic projects.
+
+- The data base should be filled with relevant collections.
+- The custom agentic logics is centralised in `services/agent/MyAgent/MyAgent/MyAgent.py`.
 
 ## Tunneling
 
