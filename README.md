@@ -84,7 +84,7 @@ Reach https://localhost:8080 and parameterize the interface. Deactivate the enco
 This framework can readily adapt to other agentic projects.
 
 - The data base should be filled with relevant collections.
-- The custom agentic logics is centralised in 'services/agent/MyAgent/MyAgent/MyAgent.py'.
+- The custom agentic logics is centralised in `services/agent/MyAgent/MyAgent/MyAgent.py`.
 
 ## Tunneling
 
