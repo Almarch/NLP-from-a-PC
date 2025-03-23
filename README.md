@@ -1,19 +1,31 @@
-# <img src="https://github.com/user-attachments/assets/bfe58e17-99f6-4ad7-af1a-ce25b21cbc6a" alt="PoKéDeX" width="50"/> Pokédex: a local LLM with RAG & UI
+# <img src="https://github.com/user-attachments/assets/bfe58e17-99f6-4ad7-af1a-ce25b21cbc6a" alt="PoKéDeX" width="50"/> Pokédex: your AI assistant to a world of dreams and adventures
 
-The goal of this repo is to play with natural language processing with relatively limited resources. The specs it has been built with are:
+The goal of this package is to provide an AI assistant to the world of Pokémon.
+
+It is also a natural language processing exercice with relatively limited resources, _i.e._ a gaming computer. The specs it has been built with are:
 
 - a linux/amd64 platform ;
 - git and docker ;
-- at least 32 Go RAM ;
-- a Nvidia GPU with cuda.
+- 32 Go RAM ;
+- a Nvidia GPU with cuda (12 Go VRAM).
 
 To make use of the later, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
 
 It may work with different specs though but make sure the amount of VRAM + RAM available is higher than the size of the model you intend to use. 
 
-![image](https://github.com/user-attachments/assets/807d20ed-1906-40a4-9bcb-11514528cc89)
+![Picture1](https://github.com/user-attachments/assets/d3b2aea5-9b25-4bcd-9c53-92093d1b450a)
 
-## Clone locally
+## 🔍 Overview
+
+The project is a stack of services, listed in the `docker-compose.yml` file.
+
+Basically, it consists in a UI and an inference service. A custom agentic proxy intercepts all requests between them, processes them, and eventually augments them from information from a vector DB.
+
+The models have been selected with respect to their minimalism, performance and multilingualism.
+
+The project has been set-up such as French is the privileged language of the AI assistant.
+
+## ⏬ Clone locally
 
 Start by cloning the repo:
 
@@ -22,7 +34,7 @@ git clone https://github.com/almarch/pokedex.git
 cd pokedex
 ```
 
-## Secure
+## 🔐 Secure
 
 The project uses [nginx](https://github.com/nginx/nginx) as a reverse proxy.
 
@@ -40,7 +52,7 @@ Also, the UI service requires a secret key:
 echo "WEBUI_SECRET_KEY=$(cat /dev/urandom | tr -dc 'A-Za-z0-9' | fold -w 32 | head -n 1)" > .env
 ```
 
-## Deploy
+## 🚀 Launch
 
 The project is containerized with [docker](https://github.com/docker).
 
@@ -53,7 +65,7 @@ docker compose up -d
 docker ps
 ```
 
-## Pull the models
+## 🦙 Pull the models
 
 [Ollama](https://github.com/ollama/ollama) is included in the stack.
 
@@ -71,26 +83,26 @@ ollama pull mistral-nemo:12b-instruct-2407-q8_0
 ollama pull bge-m3:567m-fp16
 ```
 
-## Fill the Vector DB
+## 🧩 Fill the Vector DB
 
 A [Qdrant](https://github.com/qdrant/qdrant) vector DB is included in the stack.
 
 It must be filled using the [Jupyter Notebook](https://github.com/jupyter/notebook) service, accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
 
-## Access the WebUI
+## 🎮 Access the WebUI
 
 [Open-WebUI](https://github.com/open-webui/open-webui) is included in the stack.
 
 Reach https://localhost:8080 and parameterize the interface. Deactivate the encoder model, and make the LLM accessible to all users. If needed, make accounts to the family & friends you would like to share the app with.
 
-## Adaptation to other projects
+## 🔀 Adaptation to other projects
 
 This framework can readily adapt to other agentic projects.
 
 - The data base should be filled with relevant collections.
 - The custom agentic logics is centralised in `services/agent/MyAgent/MyAgent/MyAgent.py`.
 
-## Tunneling
+## 🕳️ Tunneling
 
 <img src="https://github.com/user-attachments/assets/86197798-9039-484b-9874-85f529fba932" width="100px" align="right"/>
 
