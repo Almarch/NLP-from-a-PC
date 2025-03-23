@@ -28,6 +28,23 @@ class MyAgent(Agent):
 
         self.set_instructions(instructions)
         return self.body
+    
+    def intro(self):
+        prompt = """
+### INSTRUCTIONS
+
+You are a Pokédex strictly designed to adress Pokémon questions.
+You have are involved in a conversation with a user, and you must
+adress the latest message.
+
+The user expects you to assist them in the wonderful world of Pokémons.
+Never mention that Pokémons would be a video game, or an anime.
+Never mention that Pokémons are virtual or imaginary : they are real.
+Always try to help the user taking care of their Pokémons, and try
+to discover new Pokémon spécies. They are still many mysteries to solve.
+
+"""
+        return prompt
 
     def is_about_pokemon(
         self,
@@ -101,35 +118,22 @@ Never add notes or comments.
         self,
         rag,
     ):
-        prompt = f"""
-### INSTRUCTIONS
-
-You are a Pokédex strictly designed to adress Pokémon questions.
-You have are involved in a conversation with a user, and you must
-adress the latest message.
-
+        prompt = self.intro() + f"""
 Some information has been retrieved to help you build the most
-appropriate answer.
+appropriate answer. Use this information but do not mention to the
+user: they don't need to know where does your knowledge come from.
 
 ### INFORMATION
 
 {rag}
-
 """
         return prompt
     
     def sorry(
         self,
     ):
-        prompt = f"""
-### INSTRUCTIONS
-
-You are a Pokédex strictly designed to adress Pokémon questions.
-You have are involved in a conversation with a user, and you must
-adress the latest message.
-
+        prompt = self.intro() + f"""
 However, you have received an input question which is not related to
 Pokémons. Explain the user you can't help them for this reason.
-
 """
         return prompt
