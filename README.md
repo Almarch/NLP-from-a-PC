@@ -1,29 +1,25 @@
-# <img src="https://github.com/user-attachments/assets/bfe58e17-99f6-4ad7-af1a-ce25b21cbc6a" alt="PoKéDeX" width="50"/> Pokédex: your AI assistant to a world of dreams and adventures
+# <img src="https://github.com/user-attachments/assets/bfe58e17-99f6-4ad7-af1a-ce25b21cbc6a" alt="PoKéDeX" width="50"/> Pokédex: AI assistant to a world of dreams and adventures
 
 The goal of this package is to provide an AI assistant to the world of Pokémon.
 
-It is also a natural language processing exercice with relatively limited resources, _i.e._ a gaming computer. The specs it has been built with are:
+It consists in a stack of services, listed in the `docker-compose.yml` file.
+
+Basically, it encompasses an UI and an inference service. A custom agentic proxy intercepts the requests between these services, processes them, and eventually augments them from information from a vector DB.
+
+The models have been selected with respect to their minimalism, performance and multilingualism.
+
+The project has been set-up such as French <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="fr" width="20"/> is the privileged language of the AI assistant.
+
+![Picture1](https://github.com/user-attachments/assets/d3b2aea5-9b25-4bcd-9c53-92093d1b450a)
+
+This project can also be seen as a natural language processing exercice with relatively limited resources, _i.e._ a gaming computer. The specs it has been built with are:
 
 - a linux/amd64 platform ;
 - git and docker ;
 - 32 Go RAM ;
-- a Nvidia GPU with cuda (12 Go VRAM).
+- a Nvidia GPU (12 Go VRAM) with cuda.
 
 To make use of the later, the [Nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) is needed.
-
-It may work with different specs though but make sure the amount of VRAM + RAM available is higher than the size of the model you intend to use. 
-
-![Picture1](https://github.com/user-attachments/assets/d3b2aea5-9b25-4bcd-9c53-92093d1b450a)
-
-## 🔍 Overview
-
-The project is a stack of services, listed in the `docker-compose.yml` file.
-
-Basically, it consists in a UI and an inference service. A custom agentic proxy intercepts all requests between them, processes them, and eventually augments them from information from a vector DB.
-
-The models have been selected with respect to their minimalism, performance and multilingualism.
-
-The project has been set-up such as French is the privileged language of the AI assistant.
 
 ## ⏬ Clone locally
 
@@ -127,7 +123,7 @@ ssh -N -R 8080:localhost:8080 -R 8888:localhost:8888 -R 2222:localhost:22 userB@
 ```
 
 ### From B) the VPS
-The SSH ports 2222 and 443 have to be opened.
+The SSH ports 2222 and 8080 have to be opened.
 
 ```sh
 sudo ufw allow 2222
