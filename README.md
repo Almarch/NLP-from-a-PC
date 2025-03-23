@@ -146,6 +146,6 @@ ssh -p 2222 userA@11.22.33.44
 
 Note that `userA`, not `userB`, is required for authentication ; idem for the password.
 
-## License
+## ⚖️ License
 
 This work is licensed under GPL-2.0.
