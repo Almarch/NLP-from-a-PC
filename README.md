@@ -4,7 +4,7 @@ The goal of this package is to provide an AI assistant to the world of Pokémon.
 
 It consists in a stack of services, listed in the `docker-compose.yml` file.
 
-Basically, it encompasses an UI and an inference service. A custom agentic proxy intercepts the requests between these services, processes them, and eventually augments them from information from a vector DB.
+In a nutshell, it encompasses an UI and an inference service. A custom agentic proxy intercepts the requests between these services, processes them, and eventually augments them with information from a vector DB.
 
 The models have been selected with respect to their minimalism, performance and multilingualism.
 
