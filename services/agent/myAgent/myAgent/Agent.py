@@ -52,10 +52,10 @@ class Agent():
 ### INSTRUCTIONS
 
 You are an assistant specialized in summarizing conversations.
-You receive a conversation as input, and summarizing it with
-respects to its original language.
+You receive a conversation as input, and summarize it with
+respect to its original language.
 
-The summary must makes a special emphasize on the last message.
+The summary must make a special emphasize on the last message.
 The goal of the rest of the conversation is to add as much
 context as needed to well interpret the last message.
 
