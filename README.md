@@ -140,6 +140,8 @@ The jupyter notebook is pulled from the VPS:
 ssh -N -L 8888:localhost:8888 userB@11.22.33.44
 ```
 
+The notebook is now available for the client at https://localhost:8888.
+
 And the VPS is a direct tunnel to the gaming machine A:
 
 ```sh
