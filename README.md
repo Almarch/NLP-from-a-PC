@@ -131,6 +131,8 @@ sudo ufw allow 8080
 sudo ufw reload
 ```
 
+The UI is now available world-wide at https://11.22.33.44:8080.
+
 ### From C) the client
 The jupyter notebook is pulled from the VPS:
 
