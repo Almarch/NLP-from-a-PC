@@ -85,6 +85,8 @@ A [Qdrant](https://github.com/qdrant/qdrant) vector DB is included in the stack.
 
 It must be filled using the [Jupyter Notebook](https://github.com/jupyter/notebook) service, accessible at https://localhost:8888/lab/workspaces/auto-n/tree/pokemons.ipynb.
 
+Pokémon data come from [this repo](https://github.com/PokeAPI/pokeapi).
+
 ## 🎮 Access the WebUI
 
 [Open-WebUI](https://github.com/open-webui/open-webui) is included in the stack.
