@@ -152,6 +152,26 @@ ssh -p 2222 userA@11.22.33.44
 
 Note that `userA`, not `userB`, is required for authentication ; idem for the password.
 
+<!-- 
+
+### To go further: forward the Ollama service to use in another, distant docker cluster
+
+Say the Pokedex' Ollama service listens at local port 1234. From the server:
+
+```
+ssh -N -R 1234:localhost:1234 userB@11.22.33.44
+```
+
+From the client:
+
+```
+ssh -N -L 0.0.0.0:1234:localhost:1234 userB@11.22.33.44
+```
+
+Using 0.0.0.0 makes the forwarded port available from another docker cluster at the address: `http://host.docker.internal:1234`
+
+-->
+
 ## ⚖️ License
 
 This work is licensed under GPL-2.0.
